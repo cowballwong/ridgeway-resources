@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Thematic Bible Overview: REST · 主題聖經導覽：安息</title>
+<style>
+:root {
+  --fs: 17px;
+  --bg: #faf7f2;
+  --card: #ffffff;
+  --ink: #2d2a25;
+  --muted: #6f6a62;
+  --accent: #b25530;
+  --accent-soft: #e8d8cf;
+  --rule: #e6dfd5;
+  --quote-bg: #f3ece1;
+  --quote-bar: #b25530;
+  --banner-bg: #2d2a25;
+  --banner-ink: #faf7f2;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 14px rgba(45,42,37,.05);
+}
+[data-theme="night"] {
+  --bg: #15171a;
+  --card: #1d2024;
+  --ink: #ebe7df;
+  --muted: #9a9590;
+  --accent: #e9956a;
+  --accent-soft: #3a2a22;
+  --rule: #2a2d31;
+  --quote-bg: #232427;
+  --quote-bar: #e9956a;
+  --banner-bg: #0d0e10;
+  --banner-ink: #ebe7df;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Noto Serif TC", "Source Han Serif TC", "PingFang TC", Georgia, serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: var(--fs);
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  transition: background .25s, color .25s;
+}
+.wrap { max-width: 880px; margin: 0 auto; padding: 32px 22px 120px; }
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+  padding: 10px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.topbar .brand { font-size: 14px; color: var(--muted); }
+.topbar .brand b { color: var(--ink); }
+.controls { display: flex; gap: 6px; }
+.controls button {
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background .15s, border .15s;
+}
+.controls button:hover { border-color: var(--accent); color: var(--accent); }
+
+.hero { text-align: center; padding: 28px 0 24px; border-bottom: 1px solid var(--rule); margin-bottom: 28px; }
+.hero .eyebrow { color: var(--accent); font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; }
+.hero h1 { font-size: clamp(28px, 5vw, 44px); margin: 8px 0 4px; line-height: 1.2; }
+.hero h1 .zh { display: block; color: var(--muted); font-size: 0.7em; font-weight: 500; margin-top: 4px; }
+.hero .meta { font-size: 14px; color: var(--muted); }
+
+h2.section { font-size: 22px; margin: 36px 0 14px; }
+h2.section .zh { color: var(--muted); font-size: 16px; margin-left: 10px; font-weight: 500; }
+
+.bil { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+.bil .en, .bil .zh { background: var(--card); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; box-shadow: var(--shadow); }
+.bil .en { border-left: 3px solid var(--accent); }
+.bil .zh { border-left: 3px solid var(--muted); }
+.bil .label { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 6px; }
+@media (max-width: 640px) {
+  .bil { grid-template-columns: 1fr; }
+}
+
+.part-banner {
+  margin: 48px 0 24px;
+  background: var(--banner-bg);
+  color: var(--banner-ink);
+  border-radius: 14px;
+  padding: 22px 24px;
+  text-align: center;
+}
+.part-banner .num { color: var(--accent); font-size: 13px; letter-spacing: 0.25em; text-transform: uppercase; }
+.part-banner .en { font-size: 22px; font-weight: 600; margin-top: 6px; }
+.part-banner .zh { color: var(--accent-soft); margin-top: 4px; }
+
+.chapter {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin: 18px 0;
+  box-shadow: var(--shadow);
+}
+.chapter h3 {
+  font-size: 20px;
+  margin: 0 0 12px;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 10px;
+}
+.chapter h3 .num {
+  display: inline-block;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 50%;
+  width: 30px; height: 30px;
+  line-height: 30px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 600;
+}
+.chapter h3 .zh { color: var(--muted); font-weight: 500; font-size: 16px; }
+.chapter h4 { font-size: 15px; margin: 18px 0 6px; color: var(--accent); }
+.chapter h4 .zh { color: var(--muted); font-weight: 500; margin-left: 6px; }
+
+blockquote.passage {
+  background: var(--quote-bg);
+  border-left: 4px solid var(--quote-bar);
+  border-radius: 0 10px 10px 0;
+  padding: 12px 16px;
+  margin: 10px 0;
+  font-style: italic;
+  font-size: 0.95em;
+  line-height: 1.7;
+}
+blockquote.passage .ref {
+  display: block;
+  margin-top: 8px;
+  font-style: normal;
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+
+.commentary p { margin: 6px 0; }
+.commentary .zh { color: var(--muted); font-size: 0.95em; }
+
+ul.tight { padding-left: 22px; margin: 8px 0; }
+ul.tight li { margin: 4px 0; }
+
+.melakhot {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 4px 12px;
+  font-size: 13px;
+  color: var(--muted);
+  margin: 8px 0 10px;
+}
+
+.spectrum {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin: 12px 0;
+}
+.spectrum .col {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-top: 3px solid var(--accent);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+.spectrum .col .n { font-size: 11px; color: var(--accent); letter-spacing: 0.15em; }
+.spectrum .col b { display: block; margin-top: 4px; }
+.spectrum .col .zh { color: var(--muted); font-size: 12px; margin-top: 2px; display: block; }
+@media (max-width: 640px) {
+  .spectrum { grid-template-columns: 1fr 1fr; }
+}
+
+.spectrum-axis {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--muted);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+details.transcript {
+  background: linear-gradient(180deg, var(--quote-bg) 0%, var(--card) 100%);
+  border: 1px solid var(--accent-soft);
+  border-radius: 14px;
+  padding: 0 22px;
+  margin: 24px 0;
+  box-shadow: var(--shadow);
+}
+details.transcript[open] { padding-bottom: 18px; }
+details.transcript summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 16px 0;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent);
+}
+details.transcript summary::-webkit-details-marker { display: none; }
+details.transcript summary::before {
+  content: "▶";
+  display: inline-block;
+  font-size: 11px;
+  transition: transform .2s;
+}
+details.transcript[open] summary::before { transform: rotate(90deg); }
+details.transcript .narrative {
+  border-top: 1px dashed var(--accent-soft);
+  padding-top: 14px;
+  font-family: "Noto Serif TC", "Source Han Serif TC", "PingFang TC", Georgia, serif;
+  font-size: 0.97em;
+  line-height: 1.95;
+}
+details.transcript .narrative h4 {
+  color: var(--accent);
+  margin: 18px 0 6px;
+  font-size: 15px;
+}
+details.transcript .narrative blockquote {
+  border-left: 3px solid var(--quote-bar);
+  background: var(--bg);
+  padding: 8px 14px;
+  margin: 10px 0;
+  font-size: 0.95em;
+  border-radius: 0 8px 8px 0;
+}
+
+.audio-bar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  background: var(--card);
+  border-top: 1px solid var(--rule);
+  box-shadow: 0 -2px 14px rgba(0,0,0,.08);
+  padding: 8px 14px;
+  z-index: 25;
+}
+.audio-bar .inner {
+  max-width: 980px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.audio-bar .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--muted);
+}
+.audio-bar .header b { color: var(--ink); }
+.audio-bar .tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 6px;
+}
+.audio-bar .tab {
+  background: var(--bg);
+  color: var(--muted);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+  cursor: pointer;
+  text-align: center;
+  transition: all .15s;
+  font-family: inherit;
+}
+.audio-bar .tab:hover { border-color: var(--accent); color: var(--ink); }
+.audio-bar .tab.active {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 1px 4px rgba(178,85,48,.3);
+}
+.audio-bar .tab .num { font-weight: 700; margin-right: 4px; }
+.audio-bar .player audio {
+  width: 100%;
+  height: 36px;
+  border-radius: 8px;
+}
+.audio-bar .player .now {
+  font-size: 11px;
+  color: var(--accent);
+  text-align: center;
+  margin-bottom: 2px;
+  letter-spacing: 0.05em;
+}
+@media (max-width: 640px) {
+  .audio-bar .tabs { grid-template-columns: repeat(2, 1fr); }
+  .audio-bar .tab { font-size: 11px; }
+}
+
+footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 48px; }
+hr.soft { border: none; border-top: 1px solid var(--rule); margin: 24px 0; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><b>Ridgeway · Away Day 2026</b> · Thematic Overview: REST</div>
+  <div class="controls">
+    <button id="fontMinus" title="Smaller text">A−</button>
+    <button id="fontPlus" title="Larger text">A+</button>
+    <button id="themeToggle" title="Toggle theme">🌙 Night</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">Day Away · 退修日</div>
+  <h1>Thematic Bible Overview: REST<span class="zh">主題聖經導覽：安息</span></h1>
+  <p class="meta">Ridgeway Church &middot; 2026</p>
+</header>
+
+<!-- INTRODUCTION -->
+<section>
+  <h2 class="section">Introduction <span class="zh">引言</span></h2>
+
+  <div class="bil">
+    <div class="en">
+      <span class="label">Why discuss rest?</span>
+      Modern life is exhausting — work, family, the constant ping of notifications. We long for rest, yet often fail to find it.
+    </div>
+    <div class="zh">
+      <span class="label">為何討論「安息」？</span>
+      現代人的生活很疲累 — 上班、家庭、手機不停的提示音。我們渴望休息，卻往往找不到真正的安息。
+    </div>
+  </div>
+
+  <div class="bil">
+    <div class="en">
+      <span class="label">Why a Thematic Bible Overview?</span>
+      Following one theme from Genesis to Revelation reveals God's single, coherent story — and locates us within it.
+    </div>
+    <div class="zh">
+      <span class="label">為何要用主題式聖經導覽？</span>
+      由創世記跟到啟示錄一個主題，可以看見神的大圖畫；亦能讓我們明白自己今日身處於這個故事的哪一個位置。
+    </div>
+  </div>
+
+  <div class="bil">
+    <div class="en">
+      <span class="label">Map of the journey</span>
+      <ul class="tight">
+        <li><b>Old Testament:</b> 1) Creation · 2) Fall · 3) Promise · 4) Exodus · 5) Kingdom · 6) Exile</li>
+        <li><b>New Testament:</b> 7) Christ · 8) Church · 9) New Creation</li>
+      </ul>
+    </div>
+    <div class="zh">
+      <span class="label">今日的路線</span>
+      <ul class="tight">
+        <li><b>舊約：</b>1) 創造 · 2) 墮落 · 3) 應許 · 4) 出埃及 · 5) 王國 · 6) 被擄</li>
+        <li><b>新約：</b>7) 基督 · 8) 教會 · 9) 新創造</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- TRANSCRIPT 1 -->
+<details class="transcript" open>
+  <summary>🎙️ 講章 · 第一段：引言（Intro）</summary>
+  <div class="narrative">
+    <p>各位弟兄姊妹，大家好。今日我們一同來看一個很切身、又很深的題目 —「安息」。</p>
+    <p>為甚麼要討論這個題目呢？我相信大家都會有共鳴。上班疲累、照顧家庭疲累、人際關係疲累；甚至在電話上瀏覽兩個鐘頭社交媒體之後，整個人仍然覺得疲累。即使到了星期六、星期日這兩日，我們以為可以放鬆一下，但很多時候只是睡多了，整個人反而更加沒精神，甚至感到焦慮。我們會說：「我很需要休息。」 但奇怪的是，休息之後仍然不覺得「飽足」。問題究竟出在哪裡呢？是不是我們對「安息」這件事的理解，從一開始就不正確？</p>
+    <p>聖經由創世記第一頁，一直講到啟示錄最後一頁，其實由始至終都在談論這個題目。今日我們會用一種叫做「主題式聖經導覽」的方法，由舊約六個階段、新約三個階段，一氣呵成將「安息」這條主線串連起來。</p>
+    <p>為甚麼要這樣讀聖經呢？三個原因。</p>
+    <p><b>第一</b>，這樣讀，你會看到神的大圖畫。我們平日讀經，很多時候是今日讀馬太福音、明日讀詩篇 — 段與段之間好像沒有關連。但其實舊約和新約是同一個故事；創世記第二章那個「安息日」，與啟示錄第二十一章那個「神與人同住」，是同一個故事的開首與結尾。</p>
+    <p><b>第二</b>，你會發現神由始至終都是一致的。祂從創世那一刻已經為我們預備了安息，並不是到了耶穌降臨之後才想起要拯救我們。</p>
+    <p><b>第三</b> — 這個對我自己最重要 — 當你認得這個故事的時候，你便會知道自己今日站在這個故事裡的哪一個位置。你現在覺得疲累，覺得人生好像在曠野裡兜兜轉轉嗎？聖經提到，在曠野那一代以色列人沒有進入安息；但同時又應許：「應許進入安息的話仍然存留」。即是說，你的故事尚未完結，神的安息仍然在那裡等候你。</p>
+    <p>好，今日的安排是這樣：上半日我們看舊約 — 創造、墮落、應許、出埃及、王國、被擄；下半日我們看新約 — 基督、教會、新創造，並且看看對我們今日有甚麼實際的意義。讓我們一同翻開聖經，由創世記第 1 章開始。</p>
+  </div>
+</details>
+
+
+<!-- ===== PART 1 ===== -->
+<div class="part-banner">
+  <div class="num">Part 1 · 第一部分</div>
+  <div class="en">Rest in the Old Testament</div>
+  <div class="zh">舊約裡面的安息</div>
+</div>
+
+<!-- 1. CREATION -->
+<article class="chapter">
+  <h3><span class="num">1</span> Creation <span class="zh">創造</span></h3>
+  <blockquote class="passage">
+    God saw all that he had made, and it was very good. And there was evening, and there was morning — the sixth day. … By the seventh day God had finished the work he had been doing; so on the seventh day he rested from all his work. Then God blessed the seventh day and made it holy, because on it he rested from all the work of creating that he had done.
+    <span class="ref">Genesis 1:31 – 2:3 · 創世記 1 章 31 節至 2 章 3 節</span>
+  </blockquote>
+  <div class="commentary">
+    <p><b>Sabbath as the climax of creation.</b> Not because God was tired, but to set a pattern: completion, sufficiency, "very good".</p>
+    <p class="zh"><b>安息是創造的頂點。</b>並不是因為神疲累，而是祂以「歇工」為這個世界蓋上「甚好」的印章。安息本身就是創造的一部分。</p>
+  </div>
+</article>
+
+<!-- 2. FALL -->
+<article class="chapter">
+  <h3><span class="num">2</span> Fall <span class="zh">墮落</span></h3>
+  <blockquote class="passage">
+    Cursed is the ground because of you; through painful toil you will eat food from it all the days of your life. … By the sweat of your brow you will eat your food until you return to the ground.
+    <span class="ref">Genesis 3:17 – 19 · 創世記 3 章 17 至 19 節</span>
+  </blockquote>
+  <div class="commentary">
+    <p>Three downward steps after the Fall:</p>
+    <ul class="tight">
+      <li><b>Restless wandering</b> — Cain</li>
+      <li><b>Oppression &amp; violence</b> — Noah's flood era</li>
+      <li><b>Slavery of Babylon</b> — Babel</li>
+    </ul>
+  </div>
+  <blockquote class="passage">
+    "Come, let's make bricks and bake them thoroughly." … "Come, let us build ourselves a city, with a tower that reaches to the heavens, so that we may make a name for ourselves."
+    <span class="ref">Genesis 11:3 – 4 · 創世記 11 章 3 至 4 節</span>
+  </blockquote>
+  <div class="commentary">
+    <p class="zh"><b>「磚」是與安息相反的記號。</b>由巴別塔開始，「燒磚等於奴役」這個符號在聖經會反覆出現。</p>
+  </div>
+</article>
+
+<!-- 3. PROMISE -->
+<article class="chapter">
+  <h3><span class="num">3</span> Promise <span class="zh">應許</span></h3>
+  <blockquote class="passage">
+    The Lord had said to Abram, "Go from your country, your people and your father's household to the land I will show you. I will make you into a great nation, and I will bless you; I will make your name great, and you will be a blessing."
+    <span class="ref">Genesis 12:1 – 2 · 創世記 12 章 1 至 2 節</span>
+  </blockquote>
+  <blockquote class="passage">
+    "Know for certain that for four hundred years your descendants will be strangers in a country not their own and that they will be enslaved and mistreated there."
+    <span class="ref">Genesis 15:13 · 創世記 15 章 13 節</span>
+  </blockquote>
+  <div class="commentary">
+    <p>God promises Abraham a land of <b>rest</b> — but warns it will only come <b>after</b> 400 years of slavery.</p>
+    <p class="zh">神給亞伯拉罕一塊安息之地的應許，但同時預告：應許實現之前必須先經歷奴役與救贖。</p>
+  </div>
+</article>
+
+<!-- 4. EXODUS -->
+<article class="chapter">
+  <h3><span class="num">4</span> Exodus <span class="zh">出埃及</span></h3>
+
+  <h4>Slavery in Egypt — making bricks <span class="zh">埃及奴役 — 又是燒磚</span></h4>
+  <blockquote class="passage">
+    They made their lives bitter with harsh labour in brick and mortar … the Egyptians worked them ruthlessly.
+    <span class="ref">Exodus 1:14 · 出埃及記 1 章 14 節</span>
+  </blockquote>
+
+  <h4>Sabbath — Creation Rest <span class="zh">創造的安息</span></h4>
+  <blockquote class="passage">
+    "Remember the Sabbath day by keeping it holy. … For in six days the Lord made the heavens and the earth … but he rested on the seventh day."
+    <span class="ref">Exodus 20:8 – 11 · 出埃及記 20 章 8 至 11 節</span>
+  </blockquote>
+
+  <h4>Sabbath — Redemption Rest <span class="zh">救贖的安息</span></h4>
+  <blockquote class="passage">
+    "Remember that you were slaves in Egypt and that the Lord your God brought you out of there with a mighty hand … Therefore the Lord your God has commanded you to observe the Sabbath day."
+    <span class="ref">Deuteronomy 5:15 · 申命記 5 章 15 節</span>
+  </blockquote>
+
+  <h4>Sabbath for the Land <span class="zh">地土的安息</span></h4>
+  <blockquote class="passage">
+    "For six years you are to sow your fields … but during the seventh year let the land lie unplowed and unused."
+    <span class="ref">Exodus 23:10 – 11 · 出埃及記 23 章 10 至 11 節</span>
+  </blockquote>
+
+  <h4>Sign of the Covenant <span class="zh">立約的記號</span></h4>
+  <blockquote class="passage">
+    "The Israelites are to observe the Sabbath … as a lasting covenant. It will be a sign between me and the Israelites forever."
+    <span class="ref">Exodus 31:15 – 17 · 出埃及記 31 章 15 至 17 節</span>
+  </blockquote>
+
+  <h4>Sabbath Celebration — Festivals <span class="zh">節期的安息</span></h4>
+  <blockquote class="passage">
+    "These are the Lord's appointed festivals … the Lord's Passover … And on the seventh day hold a sacred assembly and do no regular work."
+    <span class="ref">Leviticus 23:4 – 8 · 利未記 23 章 4 至 8 節</span>
+  </blockquote>
+  <p class="commentary"><span class="zh">逾越節（含初熟節）、五旬節、住棚節、吹角節、贖罪日 — 全部都有安息日的元素。</span></p>
+
+  <h4>Year of Jubilee — the Super-Sabbath <span class="zh">禧年 — 超級安息日</span></h4>
+  <blockquote class="passage">
+    "Count off seven sabbath years — seven times seven years — so that the seven sabbath years amount to a period of forty-nine years … Consecrate the fiftieth year and proclaim liberty throughout the land to all its inhabitants."
+    <span class="ref">Leviticus 25:8 – 10 · 利未記 25 章 8 至 10 節</span>
+  </blockquote>
+  <p class="commentary">7 × 7 = 49 → 50th year is Jubilee — slaves freed, land returned, debts cancelled.<br>
+  <span class="zh">7 乘 7 等於 49，第 50 年就是禧年 — 奴僕得釋放、地業歸還、債務取消。</span></p>
+
+  <h4>Restless Disobedience <span class="zh">不肯安息的後果</span></h4>
+  <blockquote class="passage">
+    "For forty years I was angry with that generation … 'They shall never enter my rest.'"
+    <span class="ref">Psalm 95:10 – 11 · 詩篇 95 篇 10 至 11 節</span>
+  </blockquote>
+</article>
+
+<!-- 5. KINGDOM -->
+<article class="chapter">
+  <h3><span class="num">5</span> Kingdom <span class="zh">王國</span></h3>
+
+  <h4>David — partial rest <span class="zh">大衛 — 部分的安息</span></h4>
+  <blockquote class="passage">
+    After [King David] was settled in his palace and the Lord had given him rest from all his enemies around him …
+    <span class="ref">2 Samuel 7:1 – 2 · 撒母耳記下 7 章 1 至 2 節</span>
+  </blockquote>
+  <blockquote class="passage">
+    For if Joshua had given them rest, God would not have spoken later about another day.
+    <span class="ref">Hebrews 4:8 · 希伯來書 4 章 8 節</span>
+  </blockquote>
+  <p class="commentary"><span class="zh">大衛得到的安息只是部分的 — 真正的安息仍未到。</span></p>
+
+  <h4>Solomon's slavery splits the kingdom <span class="zh">所羅門的徵工分裂了國家</span></h4>
+  <blockquote class="passage">
+    Here is the account of the forced labour King Solomon conscripted to build the Lord's temple, his own palace, the terraces …
+    <span class="ref">1 Kings 9:15 – 18 · 列王紀上 9 章 15 至 18 節</span>
+  </blockquote>
+  <blockquote class="passage">
+    "Your father put a heavy yoke on us, but now lighten the harsh labour and the heavy yoke he put on us."
+    <span class="ref">1 Kings 12:4 · 列王紀上 12 章 4 節</span>
+  </blockquote>
+  <p class="commentary">The kingdom that should have <b>given</b> rest became another Egypt that <b>denied</b> it.<br>
+  <span class="zh">本應給人安息的王國，竟變成另一個埃及。</span></p>
+
+  <h4>A pattern of oppression <span class="zh">壓迫的模式延續</span></h4>
+  <blockquote class="passage">
+    "Woe to him who builds his palace by unrighteousness … making his own people work for nothing, not paying them for their labour … your eyes and your heart are set only on dishonest gain, on shedding innocent blood and on oppression and extortion."
+    <span class="ref">Jeremiah 22:13, 17 · 耶利米書 22 章 13 節及 17 節</span>
+  </blockquote>
+</article>
+
+<!-- 6. EXILE -->
+<article class="chapter">
+  <h3><span class="num">6</span> Exile <span class="zh">被擄</span></h3>
+
+  <h4>Crime — failure to rest <span class="zh">罪 — 不守安息</span></h4>
+  <blockquote class="passage">
+    "If in spite of this you still do not listen to me … I will scatter you among the nations … Then the land will enjoy its sabbath years."
+    <span class="ref">Leviticus 26:27, 33 – 35 · 利未記 26 章 27 節及 33 至 35 節</span>
+  </blockquote>
+
+  <h4>Punishment — slavery in Babylon <span class="zh">刑罰 — 巴比倫為奴</span></h4>
+  <blockquote class="passage">
+    He carried into exile to Babylon … The land enjoyed its sabbath rests; all the time of its desolation it rested, until the seventy years were completed.
+    <span class="ref">2 Chronicles 36:20 – 21 · 歷代誌下 36 章 20 至 21 節</span>
+  </blockquote>
+
+  <h4>Prophecy — forgiveness &amp; the "Super-Jubilee" <span class="zh">預言 — 超級禧年</span></h4>
+  <blockquote class="passage">
+    "Seventy 'sevens' are decreed for your people and your holy city to finish transgression, to put an end to sin, to atone for wickedness, to bring in everlasting righteousness …"
+    <span class="ref">Daniel 9:24 · 但以理書 9 章 24 節</span>
+  </blockquote>
+  <p class="commentary">70 × 7 = 490 — about 500 years to a "Super-Jubilee".<br>
+  <span class="zh">70 乘 7 等於 490 年，倒數一個超級禧年。</span></p>
+
+  <h4>Liberation <span class="zh">釋放</span></h4>
+  <blockquote class="passage">
+    "Babylon has fallen, has fallen! All the images of its gods lie shattered on the ground!"
+    <span class="ref">Isaiah 21:9 · 以賽亞書 21 章 9 節</span>
+  </blockquote>
+
+  <h4>Anti-climax — license &amp; legalism <span class="zh">反高潮 — 放縱與律法主義</span></h4>
+  <blockquote class="passage">
+    "What is this wicked thing you are doing — desecrating the Sabbath day? … Once or twice the merchants … spent the night outside Jerusalem. But I warned them … I commanded the Levites to purify themselves and go and guard the gates …"
+    <span class="ref">Nehemiah 13:17 – 22 · 尼希米記 13 章 17 至 22 節</span>
+  </blockquote>
+  <p class="commentary">Even after exile, hearts hadn't truly changed. The OT story ends waiting for someone greater.<br>
+  <span class="zh">即使被擄歸回，人心仍然未真正改變。舊約的故事以反高潮收結 — 仍在等候一位更大的救主。</span></p>
+</article>
+
+<!-- TRANSCRIPT 2 -->
+<details class="transcript">
+  <summary>🎙️ 講章 · 第二段：舊約裡面的安息（Part 1）</summary>
+  <div class="narrative">
+
+    <h4>1. 創造</h4>
+    <p>整個故事，由神用六日創造完萬有開始。第七日，神就安息了。創世記 1 章 31 節至 2 章 3 節這樣說：「神看着一切所造的都甚好……第七日，神造物的工已經完畢，就在第七日歇了祂一切的工，安息了。」</p>
+    <p>請留意一個細節 — 神疲累嗎？並不疲累。那麼祂為甚麼要安息呢？因為祂要立一個範本給我們。祂透過第七日的安息，告訴我們有一種狀態叫做「成全」，已經做完了、夠了、不需要再追、不需要再爭。「甚好」是祂自己的總結。安息最基本的意義，就是事情完成了之後的滿足。</p>
+
+    <h4>2. 墮落</h4>
+    <p>但你知道之後發生了甚麼事。亞當夏娃不聽神的話，神就說出「汗流滿面才得糊口」這句咒詛。從那一刻開始，人類就再沒有真正的安息。</p>
+    <p>接着創世記用三個故事一層深過一層畫給我們看：該隱 — 流離飄盪；挪亞時代 — 遍地強暴；巴別塔 — 「我們來作磚，把磚燒透」。「磚」這個字在聖經第一次出現，每一次都是「沒有安息」的記號。然後這群人說「我們為自己揚名」 — 神給人安息是領受，人的墮落卻是攫取。</p>
+
+    <h4>3. 應許</h4>
+    <p>神揀選亞伯拉罕，給他一個安息的應許 — 一塊有家、有福、有名的地。神親自為亞伯拉罕「立名」，反轉了巴別塔的扭曲。但神很早便透露：「你的後裔必在別人的地寄居，被苦待四百年。」即是說，在得到安息之前，必先經歷奴役與救贖。</p>
+
+    <h4>4. 出埃及</h4>
+    <p>四百年之後，以色列人在埃及作奴隸 — 又是「磚」。神拯救他們出來，在西奈山頒佈十誡，第四條就是安息日。出埃及記版本講創造，申命記版本講救贖 — 兩個都對，安息有雙重意義。</p>
+    <p>神再將「安息」的原則擴展：地土也要安息（每七年休耕一次）；安息日是立約的記號；節期都有安息日的元素；最 epic 是禧年 — 七乘七等於 49，加一年等於 50 年大禧年，奴僕得釋放、土地歸還、債務取消。安息並不是一日的事，而是滲透到時間、土地、社會、經濟每一個層面。</p>
+    <p>但是 — 以色列人在曠野心硬，詩篇 95 篇說神「斷不可進入我的安息」。這句話之後在希伯來書再次出現 — 我們稍後回來再講。</p>
+
+    <h4>5. 王國</h4>
+    <p>大衛王得到部分的安息 — 「主使他安然居住」。但希伯來書 4 章 8 節說：「若是約書亞已叫他們享了安息，後來神就不再提別的日子了。」即是說這個安息仍未是終極的那一個。</p>
+    <p>所羅門興建聖殿、宮殿、城牆，用的是徵召勞工 — 又是另一個磚塊系統。所羅門死後國民投訴：「你父親使我們負重軛。」 結果國家分裂。耶利米斥責君王：「白白使用人的手工不給工價」。本應給人安息的王國，變成另一個埃及。</p>
+
+    <h4>6. 被擄</h4>
+    <p>神早已警告：如果你們不守安息，地土會自己取回它的安息。歷代誌下 36 章一句的總結：「地享受安息……直滿了七十年。」這七十年是審判，亦是重置。</p>
+    <p>在被擄期間，但以理書帶來一個驚人的應許 —「為你本國之民和你聖城，已經定了七十個七」。70 乘 7 等於 490 年，倒數一個超級禧年。巴比倫倒塌了，以色列人回到耶路撒冷。但尼希米記 13 章記載一個失望的反高潮 — 人們在安息日仍然做生意，尼希米要親自把城門關上。</p>
+    <p>舊約的故事到這裡有一點反高潮 — 真正的安息仍未到。讀者在這裡問：到底誰可以帶來真正的安息？這就是新約的第一段。</p>
+  </div>
+</details>
+
+
+<!-- ===== PART 2 ===== -->
+<div class="part-banner">
+  <div class="num">Part 2 · 第二部分</div>
+  <div class="en">Rest in the New Testament</div>
+  <div class="zh">新約裡面的安息</div>
+</div>
+
+<!-- 7. EMMANUEL -->
+<article class="chapter">
+  <h3><span class="num">7</span> Emmanuel <span class="zh">以馬內利 — 基督</span></h3>
+
+  <h4>Jesus announces the Super-Jubilee <span class="zh">耶穌宣告超級禧年</span></h4>
+  <blockquote class="passage">
+    "The Spirit of the Lord is on me, because he has anointed me to proclaim good news to the poor. He has sent me to proclaim freedom for the prisoners and recovery of sight for the blind, to set the oppressed free, to proclaim the year of the Lord's favour."
+    <span class="ref">Luke 4:17 – 19 · 路加福音 4 章 17 至 19 節</span>
+  </blockquote>
+  <p class="commentary"><span class="zh">「主的恩年」就是禧年 — 但以理書的倒數，到耶穌時應驗。</span></p>
+
+  <h4>Pharisees &amp; Sabbath — the 39 Melakhot <span class="zh">法利賽人的 39 條禁工</span></h4>
+  <blockquote class="passage">
+    "Whoever does any work [<i>melakha</i>] on the Sabbath day is to be put to death."
+    <span class="ref">Exodus 31:15b · 出埃及記 31 章 15 節</span>
+  </blockquote>
+  <p class="commentary">The Talmud (~AD 200) lists 39 categories of forbidden "work":</p>
+  <div class="melakhot">
+    <div>耕地</div><div>播種</div><div>收割</div><div>聚集</div>
+    <div>打穀</div><div>揚場</div><div>過篩</div><div>磨穀</div>
+    <div>篩麵</div><div>揉麵</div><div>烘焙</div><div>剪羊毛</div>
+    <div>洗衣</div><div>梳毛</div><div>染色</div><div>紡紗</div>
+    <div>掛經紗</div><div>製絲環</div><div>織布</div><div>解紗</div>
+    <div>打結</div><div>解結</div><div>貼膠</div><div>撕扯</div>
+    <div>設陷阱</div><div>宰殺</div><div>剝皮</div><div>鞣皮</div>
+    <div>磨光</div><div>刻劃</div><div>精切</div><div>寫字</div>
+    <div>擦字</div><div>建造</div><div>拆毀</div><div>完成器皿</div>
+    <div>滅火</div><div>點火</div><div>揹負</div>
+  </div>
+  <p class="commentary"><span class="zh">「剪羊毛」包括除眉毛；「揹負」連口袋有任何東西也算。本來是祝福的安息日，變成最沉重的軛。</span></p>
+
+  <h4>Jesus &amp; Sabbath <span class="zh">耶穌的安息</span></h4>
+  <blockquote class="passage">
+    "Come to me, all you who are weary and burdened, and I will give you rest. Take my yoke upon you and learn from me, for I am gentle and humble in heart, and you will find rest for your souls. For my yoke is easy and my burden is light."
+    <span class="ref">Matthew 11:28 – 30 · 馬太福音 11 章 28 至 30 節</span>
+  </blockquote>
+  <blockquote class="passage">
+    Jesus went through the grainfields on the Sabbath. … "I tell you that something greater than the temple is here. … For the Son of Man is Lord of the Sabbath." … He went into their synagogue, and a man with a shrivelled hand was there. … "It is lawful to do good on the Sabbath." … But the Pharisees went out and plotted how they might kill Jesus.
+    <span class="ref">Matthew 12:1 – 14 · 馬太福音 12 章 1 至 14 節</span>
+  </blockquote>
+  <ul class="tight">
+    <li><b>True rest is in Jesus.</b> 真正的安息在於耶穌。</li>
+    <li><b>Jesus is Lord of the Sabbath.</b> 耶穌是安息日的主。</li>
+    <li><b>Rest is about love &amp; mercy, not rules.</b> 安息的本質是愛與憐憫，並不是規條。</li>
+  </ul>
+</article>
+
+<!-- 8. CHURCH -->
+<article class="chapter">
+  <h3><span class="num">8</span> Church <span class="zh">教會</span></h3>
+
+  <h4>The Lord's Day <span class="zh">主日 — 第一日</span></h4>
+  <blockquote class="passage">
+    Early on the first day of the week, while it was still dark, Mary Magdalene came to the tomb …
+    <span class="ref">John 20:1 · 約翰福音 20 章 1 節</span>
+  </blockquote>
+  <blockquote class="passage">
+    On the first day of the week we came together to break bread …
+    <span class="ref">Acts 20:7 · 使徒行傳 20 章 7 節</span>
+  </blockquote>
+  <blockquote class="passage">
+    On the Lord's Day, I was in the Spirit …
+    <span class="ref">Revelation 1:10 · 啟示錄 1 章 10 節</span>
+  </blockquote>
+  <p class="commentary">Sunday — first day of the new creation, the day of resurrection. Not a replacement of Sabbath, but a celebration.<br>
+  <span class="zh">主日 — 新創造的第一日，亦是復活的日子。並不是取代安息日，而是慶祝。</span></p>
+
+  <h4>Not required to keep Sabbath — Jerusalem Council <span class="zh">耶路撒冷大會 — 不要求外邦人守安息日</span></h4>
+  <blockquote class="passage">
+    "It seemed good to the Holy Spirit and to us not to burden you with anything beyond the following requirements: You are to abstain from food sacrificed to idols, from blood, from the meat of strangled animals and from sexual immorality."
+    <span class="ref">Acts 15:27 – 29 · 使徒行傳 15 章 27 至 29 節</span>
+  </blockquote>
+
+  <h4>Different views are accepted — Romans <span class="zh">羅馬書 — 容許不同觀點</span></h4>
+  <blockquote class="passage">
+    One person considers one day more sacred than another; another considers every day alike. Each of them should be fully convinced in their own mind. … let us stop passing judgment on one another.
+    <span class="ref">Romans 14:5 – 6, 13 · 羅馬書 14 章 5 至 6 節及 13 節</span>
+  </blockquote>
+
+  <h4>Shadow vs Reality — Colossians <span class="zh">影兒與形體</span></h4>
+  <blockquote class="passage">
+    Therefore do not let anyone judge you by what you eat or drink, or with regard to a religious festival, a New Moon celebration or a Sabbath day. These are a shadow of the things that were to come; the reality, however, is found in Christ.
+    <span class="ref">Colossians 2:16 – 17 · 歌羅西書 2 章 16 至 17 節</span>
+  </blockquote>
+
+  <h4>Gospel Rest — now &amp; not yet — Hebrews <span class="zh">福音的安息 — 已然未然</span></h4>
+  <blockquote class="passage">
+    Therefore, since the promise of entering his rest still stands, let us be careful that none of you be found to have fallen short of it. … There remains, then, a Sabbath-rest for the people of God; for anyone who enters God's rest also rests from their works, just as God did from his. Let us, therefore, make every effort to enter that rest …
+    <span class="ref">Hebrews 4:1 – 3, 8 – 11 · 希伯來書 4 章 1 至 3 節及 8 至 11 節</span>
+  </blockquote>
+  <p class="commentary">When you enter God's rest you rest from your <b>works</b> — no longer earning, only receiving. <b>Already</b>, by faith — yet <b>not yet</b> consummated.<br>
+  <span class="zh">當你進入神的安息時，就從自己的工作中安息出來 — 不再賺取，只是領受。已經因着信進入了，但仍未圓滿，所以要繼續竭力進入。</span></p>
+</article>
+
+<!-- 9. NEW CREATION -->
+<article class="chapter">
+  <h3><span class="num">9</span> New Creation <span class="zh">新創造</span></h3>
+
+  <h4>The end of slavery in Babylon <span class="zh">巴比倫的終極倒塌</span></h4>
+  <blockquote class="passage">
+    With a mighty voice he shouted: "'Fallen! Fallen is Babylon the Great!'"
+    <span class="ref">Revelation 18:1 – 2 · 啟示錄 18 章 1 至 2 節</span>
+  </blockquote>
+
+  <h4>No rest for the wicked <span class="zh">作惡者沒有安息</span></h4>
+  <blockquote class="passage">
+    "And the smoke of their torment will rise for ever and ever. There will be no rest day or night for those who worship the beast and its image."
+    <span class="ref">Revelation 14:11 · 啟示錄 14 章 11 節</span>
+  </blockquote>
+
+  <h4>New-Creation Rest for God's People <span class="zh">神的子民得享新創造的安息</span></h4>
+  <blockquote class="passage">
+    "Look! God's dwelling place is now among the people, and he will dwell with them. They will be his people, and God himself will be with them and be their God. He will wipe every tear from their eyes. There will be no more death or mourning or crying or pain, for the old order of things has passed away."
+    <span class="ref">Revelation 21:3 – 4 · 啟示錄 21 章 3 至 4 節</span>
+  </blockquote>
+
+  <h4>Three dimensions of final rest <span class="zh">終極安息的三重含義</span></h4>
+  <ul class="tight">
+    <li><b>Redemption Rest 救贖的安息</b> — personal sin overcome · curse removed · world &amp; devil defeated and punished. <span class="zh">罪、咒詛、世界、魔鬼，全部被處理。</span></li>
+    <li><b>Relationship Rest 關係的安息</b> — perfect relationship with God · harmony with each other. <span class="zh">與神、與人完全和諧。</span></li>
+    <li><b>Celebration Rest 慶祝的安息</b> — a wedding feast, a banquet of rich food. <span class="zh">羔羊的婚筵 — 安息並不是齋戒，而是筵席。</span></li>
+  </ul>
+
+  <blockquote class="passage">
+    On this mountain the Lord Almighty will prepare a feast of rich food for all peoples, a banquet of aged wine — the best of meats and the finest of wines.
+    <span class="ref">Isaiah 25:6 · 以賽亞書 25 章 6 節</span>
+  </blockquote>
+</article>
+
+<!-- TRANSCRIPT 3 -->
+<details class="transcript">
+  <summary>🎙️ 講章 · 第三段：新約裡面的安息（Part 2）</summary>
+  <div class="narrative">
+
+    <h4>7. 以馬內利 — 基督</h4>
+    <p>耶穌出來事奉，第一次正式在會堂宣告自己身分的那一次，讀的就是以賽亞書一段關於禧年的經文。路加福音 4 章 18 至 19 節：「主的靈在我身上 …… 報告神悅納人的禧年。」「神悅納人的禧年」就是禧年 — 即是祂在說：但以理書那個倒數結束了，超級禧年來到了。</p>
+    <p>但祂如何演繹「安息」呢？答案是 — 透過祂與法利賽人的衝突。法利賽人有一套叫做「39 條 melakhot」 — 39 種在安息日不可以做的工作。我們讀幾項你便明白有多誇張：耕地、收割、磨穀、揉麵、揹負、生火、滅火……「揹負」連口袋有任何東西都不可以；「剪羊毛」連除眉毛都計算在內。本來是給人享受的安息日，變成一個重擔。</p>
+    <p>耶穌就在這個背景下說出那句最有名的話 — 馬太福音 11 章 28 節：「凡勞苦擔重擔的人，可以到我這裡來，我就使你們得安息。我的軛是容易的，我的擔子是輕省的。」請留意祂用「軛」這個字 — 法利賽人的軛是 39 條規矩，是磚塊；耶穌的軛是祂自己 — 是關係，並不是規條。</p>
+    <p>接着的第 12 章，在安息日發生兩件事：門徒掐麥穗來吃，法利賽人非常憤怒 — 耶穌回應：「人子是安息日的主」。然後耶穌在會堂醫好一個枯乾手的人 — 法利賽人就出去商議怎樣可以除滅祂。多麼諷刺 — 守安息日守到要殺人。</p>
+    <p>耶穌的信息非常清楚：真正的安息在耶穌身上，並不在於日子；安息的本質是愛與憐憫，並不是規條。而祂自己的死與復活，才是終極的安息日。</p>
+
+    <h4>8. 教會</h4>
+    <p>耶穌復活之後，初代教會慢慢由星期六轉到星期日 — 並不是因為命令，而是因為意義。「七日的頭一日」是復活的日子，是新創造的第一日。</p>
+    <p>但是不是取代了安息日呢？看以下幾段經文：耶路撒冷大會（使徒行傳 15 章）並沒有要求外邦人守安息日；羅馬書 14 章「有人看這日比那日強，有人看日日都是一樣 — 我們不可再彼此論斷」；歌羅西書 2 章說安息日「原是後事的影兒，那形體卻是基督」。「影兒」對「形體」 — 安息日並不是被取消，而是已經應驗在基督裡面。</p>
+    <p>而最深的論述在希伯來書 4 章。經文說安息的應許「仍然存留」 — 我們已經相信的人可以進入。但作者跟着說：「務必竭力進入那安息。」即是「已然未然」 — 已經因着信進入了，但仍未圓滿。最關鍵的一句：「凡進入神安息的人，乃是歇了自己的工」 — 即是不再靠自己的功勞救自己，而是靠基督完成的工。這就是福音的核心。</p>
+
+    <h4>9. 新創造</h4>
+    <p>啟示錄將這條主線完滿。巴比倫倒塌了 — 並不是公元前 590 年那個巴比倫，而是屬靈意義上那個大巴比倫 — 一切奴役、欺壓、為自己揚名的勢力。對拒絕基督的人 — 終極的不安息：「拜獸的人，晝夜不得安寧。」</p>
+    <p>但對神的子民 — 啟示錄 21 章 3 至 4 節：「神的帳幕在人間，神要與人同住 …… 神要擦去他們一切的眼淚，不再有死亡，亦不再有悲哀、哭號、疼痛，因為以前的事都過去了。」</p>
+    <p>這個圖畫包含三層安息：救贖的安息（罪、咒詛、撒但全部解決）、關係的安息（與神與人完全和諧）、慶祝的安息（羔羊的婚筵）。安息並不是無所事事 — 而是慶祝，是宴會，是家。</p>
+    <p>由創世記的第一個安息日，到啟示錄的永恆安息日，圈完滿。神的故事，由始至終都是邀請我們進入祂的安息。</p>
+  </div>
+</details>
+
+
+<!-- ===== PART 3 ===== -->
+<div class="part-banner">
+  <div class="num">Part 3 · 第三部分</div>
+  <div class="en">Rest for Us Now</div>
+  <div class="zh">那麼我們現在如何？</div>
+</div>
+
+<article class="chapter">
+  <h3><span class="num">📍</span> Points of view about rest <span class="zh">基督徒對安息日的四種看法</span></h3>
+
+  <div class="spectrum-axis">
+    <div>← Continuity 連續</div>
+    <div>Discontinuity 不連續 →</div>
+  </div>
+  <div class="spectrum">
+    <div class="col">
+      <div class="n">1</div>
+      <b>Seventh-day Adventists</b>
+      <span class="zh">第七日安息日會 — 仍然守星期六。</span>
+    </div>
+    <div class="col">
+      <div class="n">2</div>
+      <b>Christian Sabbath</b>
+      <span class="zh">基督教安息日 — 將星期日視為新的安息日，要完全休息。</span>
+    </div>
+    <div class="col">
+      <div class="n">3</div>
+      <b>Creation Pattern</b>
+      <span class="zh">創造的模式 — 不死守一日，但每七日仍要休息一日。</span>
+    </div>
+    <div class="col">
+      <div class="n">4</div>
+      <b>Fulfilment in Christ</b>
+      <span class="zh">在基督裡的成全 — 安息已經在基督裡實現。</span>
+    </div>
+  </div>
+</article>
+
+<article class="chapter">
+  <h3><span class="num">📍</span> Principles for rest <span class="zh">四種安息的原則</span></h3>
+  <ul class="tight">
+    <li><b>Physical Rest 身體的安息</b> — 補充與消耗要平衡。你是肉身的，需要睡眠、需要停手。</li>
+    <li><b>Redemption Rest 救贖的安息</b> — 從工作之中安息出來。靠基督完成的工，不再靠自己的表現。</li>
+    <li><b>Relationship Rest 關係的安息</b> — 與神、與人和好。</li>
+    <li><b>Celebration Rest 慶祝的安息</b> — 享受神所賜的好東西。歡笑、感恩、筵席。</li>
+  </ul>
+  <p class="commentary"><b>God's punishment for failing to rest is …</b><br>
+  <span class="zh">請留意一個規律 — 神對「不肯安息」的刑罰，往往就是 — 「讓你繼續造磚」。當你拒絕進入神的安息時，神的審判很多時候就是：讓你繼續做你現在所做的事，但永遠沒有飽足。</span></p>
+</article>
+
+<article class="chapter">
+  <h3><span class="num">📍</span> Practical suggestions <span class="zh">實踐建議</span></h3>
+  <ul class="tight">
+    <li><b>Have a day off each week</b> — 每星期有一日真正休息，補充與消耗要平衡。</li>
+    <li><b>Take Holidays</b> — 放假並不是奢侈，而是順服。</li>
+    <li><b>Go to Church</b> — 嘗試將星期日特別留給神。</li>
+    <li><b>Rest with Jesus</b> — 在耶穌裡安息 — 這是根本。</li>
+  </ul>
+  <blockquote class="passage" style="margin-top:14px;">
+    "Come to me, all you who are weary and burdened, and I will give you rest."
+    <span class="ref">Matthew 11:28 · 馬太福音 11 章 28 節</span>
+  </blockquote>
+</article>
+
+<!-- TRANSCRIPT 4 -->
+<details class="transcript">
+  <summary>🎙️ 講章 · 第四段：對我們現在的意義（Part 3）</summary>
+  <div class="narrative">
+    <p>那麼我們現在如何呢？</p>
+
+    <h4>觀點：基督徒對安息日的四種看法</h4>
+    <p>由極連續到極不連續，可以分為四種：</p>
+    <ol>
+      <li><b>第七日安息日會</b> — 仍然守星期六，因為十誡並未被取消。</li>
+      <li><b>基督教安息日</b> — 將星期日視為新的安息日，要守為聖日。</li>
+      <li><b>創造的模式</b> — 安息日是創造的原則，不死守某一日，但每七日要休息一日。</li>
+      <li><b>在基督裡的成全</b> — 安息已經在基督裡實現，每一日都可以在祂裡面安息。</li>
+    </ol>
+    <p>我自己的立場接近第三和第四之間 — 我相信「安息」既是創造的模式，亦是基督所成全的；但我們仍然需要節奏。我會將星期日留給神、留給家庭，但並不是用律法的心去守。但更重要的問題並不是哪一個觀點正確，而是：你有沒有真正進入神的安息？</p>
+
+    <h4>四種安息的原則</h4>
+    <ul>
+      <li><b>身體的安息</b> — 你是肉身的。神造你需要睡眠、需要停手。如果你已經一星期七日不停地工作，請不要將這個問題屬靈化 — 你需要一日休息。</li>
+      <li><b>救贖的安息</b> — 在基督裡，從你自己的功勞和表現之中休息出來。你已經被神接納，並不需要再用「做事」來證明自己存在的價值。</li>
+      <li><b>關係的安息</b> — 與神的關係沒有張力，與人的關係沒有仇恨。如果你心裡背着怨恨，無論睡多久也不會真正得安息。</li>
+      <li><b>慶祝的安息</b> — 享受神所賜的好東西。與朋友吃飯、與家人玩耍、笑、感恩。安息日並不是齋戒。</li>
+    </ul>
+    <p>這四樣，你現在哪一樣最缺乏呢？</p>
+
+    <h4>神對「不肯安息」的「刑罰」</h4>
+    <p>請留意一個規律 — 由舊約到新約，神對「不肯安息」的刑罰，往往就是 — 「讓你繼續造磚」。埃及奴役、所羅門徵工、巴比倫被擄、啟示錄 14 章「晝夜不得安寧」 — 全部都是這樣。即是說，當你拒絕進入神的安息時，神的審判很多時候就是：讓你繼續做你現在所做的事，但永遠沒有飽足。</p>
+    <p>這提醒我們 — 不肯安息，並不是「敬虔」，而是拜偶像。是說：「我自己掌控我的生命，我並不需要神的供應。」</p>
+
+    <h4>實踐建議</h4>
+    <ol>
+      <li><b>每星期有一日真正休息</b> — 補充與消耗要平衡。</li>
+      <li><b>放假</b> — 不要覺得放假是奢侈，這是順服。</li>
+      <li><b>回到教會</b> — 試試將星期日留給神。並不是律法，而是訓練心去領受。</li>
+      <li><b>在耶穌裡安息</b> — 這是根本。如果你的心沒有在基督裡安歇，無論放多久假也不夠。</li>
+    </ol>
+
+    <p>耶穌說：「凡勞苦擔重擔的人，可以到我這裡來，我就使你們得安息。」 — 馬太福音 11 章 28 節。</p>
+    <p>這句話今日仍然有效。祂並沒有說「等你做得好一點再來」、並沒有說「等你解決了問題再來」 — 祂是說：你勞苦、你擔重擔，就來。</p>
+    <p>今日的退修日，希望不單只是知識上多了解安息的大圖畫，而是在這一日，你真正在神面前歇息一下，讓祂擦去你心中的疲乏。</p>
+    <p><b>讓我們一同禱告。</b></p>
+  </div>
+</details>
+
+<hr class="soft">
+<footer>
+  Ridgeway Church Day Away · Thematic Bible Overview: REST · 主題聖經導覽：安息<br>
+  English text adapted from the original document. 中文書面語講章稿由 LillyRose 撰寫供 Anzon 審閱。<br>
+  <small>Bible quotations from NIV (English) · 中文聖經引用以「X 章 Y 節」寫法，方便 TTS 朗讀。</small>
+</footer>
+
+</div><!-- /wrap -->
+
+<div class="audio-bar" id="audioBar">
+  <div class="inner">
+    <div class="header">
+      <span>🎧 <b>Cantonese Audio</b> · 廣東話錄音 · MiniMax T2A v2</span>
+      <span id="audioMeta">~35 min total</span>
+    </div>
+    <div class="tabs" id="audioTabs">
+      <button class="tab active" data-src="audio/segment_1_intro.mp3"        data-label="第一段：引言"><span class="num">1</span>引言 Intro</button>
+      <button class="tab"        data-src="audio/segment_2_old_testament.mp3" data-label="第二段：舊約裡面的安息"><span class="num">2</span>舊約 Part 1</button>
+      <button class="tab"        data-src="audio/segment_3_new_testament.mp3" data-label="第三段：新約裡面的安息"><span class="num">3</span>新約 Part 2</button>
+      <button class="tab"        data-src="audio/segment_4_application.mp3"   data-label="第四段：對我們現在的意義"><span class="num">4</span>應用 Part 3</button>
+    </div>
+    <div class="player">
+      <div class="now" id="nowPlaying">▶ 第一段：引言</div>
+      <audio id="audioPlayer" src="audio/segment_1_intro.mp3" controls preload="metadata"></audio>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const root = document.documentElement;
+  const themeBtn = document.getElementById('themeToggle');
+  const savedTheme = localStorage.getItem('awayday_theme');
+  if (savedTheme) root.setAttribute('data-theme', savedTheme);
+  function syncThemeBtn() {
+    const t = root.getAttribute('data-theme');
+    themeBtn.textContent = t === 'night' ? '☀️ Day' : '🌙 Night';
+  }
+  syncThemeBtn();
+  themeBtn.addEventListener('click', () => {
+    const t = root.getAttribute('data-theme') === 'night' ? 'day' : 'night';
+    root.setAttribute('data-theme', t);
+    localStorage.setItem('awayday_theme', t);
+    syncThemeBtn();
+  });
+
+  const minSize = 13, maxSize = 24;
+  let fs = parseInt(localStorage.getItem('awayday_fs') || '17', 10);
+  function applyFs() { root.style.setProperty('--fs', fs + 'px'); }
+  applyFs();
+  document.getElementById('fontPlus').addEventListener('click', () => {
+    if (fs < maxSize) { fs += 1; applyFs(); localStorage.setItem('awayday_fs', fs); }
+  });
+  document.getElementById('fontMinus').addEventListener('click', () => {
+    if (fs > minSize) { fs -= 1; applyFs(); localStorage.setItem('awayday_fs', fs); }
+  });
+
+  function padBottom() {
+    const bar = document.getElementById('audioBar');
+    if (bar) document.querySelector('.wrap').style.paddingBottom = (bar.offsetHeight + 40) + 'px';
+  }
+  window.addEventListener('load', padBottom);
+  window.addEventListener('resize', padBottom);
+
+  // Audio segment switcher
+  const tabs = document.querySelectorAll('#audioTabs .tab');
+  const player = document.getElementById('audioPlayer');
+  const nowPlaying = document.getElementById('nowPlaying');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const src = tab.getAttribute('data-src');
+      const label = tab.getAttribute('data-label');
+      player.src = src;
+      nowPlaying.textContent = '▶ ' + label;
+      player.play().catch(() => { /* user gesture may be required */ });
+      padBottom();
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ridgeway Church Resources · 廣道教會資源</title>
+<meta name="description" content="Sermons, study notes, and special events from Ridgeway Church Cantonese ministry.">
+<style>
+:root {
+  --fs: 17px;
+  --bg: #faf7f2;
+  --card: #ffffff;
+  --ink: #2d2a25;
+  --muted: #6f6a62;
+  --accent: #b25530;
+  --accent-soft: #e8d8cf;
+  --rule: #e6dfd5;
+  --quote-bg: #f3ece1;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 14px rgba(45,42,37,.05);
+}
+[data-theme="night"] {
+  --bg: #15171a;
+  --card: #1d2024;
+  --ink: #ebe7df;
+  --muted: #9a9590;
+  --accent: #e9956a;
+  --accent-soft: #3a2a22;
+  --rule: #2a2d31;
+  --quote-bg: #232427;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Noto Serif TC", "Source Han Serif TC", "PingFang TC", Georgia, serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: var(--fs);
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  transition: background .25s, color .25s;
+}
+.wrap { max-width: 980px; margin: 0 auto; padding: 28px 22px 100px; }
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+  padding: 10px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.topbar .brand { font-size: 14px; color: var(--muted); }
+.topbar .brand b { color: var(--ink); }
+.controls button {
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background .15s, border .15s;
+}
+.controls button:hover { border-color: var(--accent); color: var(--accent); }
+
+.hero {
+  text-align: center;
+  padding: 56px 0 40px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 36px;
+}
+.hero .eyebrow {
+  color: var(--accent);
+  font-size: 13px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+.hero h1 {
+  font-size: clamp(32px, 5.5vw, 52px);
+  margin: 12px 0 8px;
+  line-height: 1.18;
+  font-weight: 600;
+}
+.hero h1 .zh {
+  display: block;
+  color: var(--muted);
+  font-size: 0.6em;
+  font-weight: 500;
+  margin-top: 8px;
+  letter-spacing: 0.05em;
+}
+.hero .lead {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 600px;
+  margin: 16px auto 0;
+}
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 8px 0 18px;
+  padding: 0 4px;
+}
+.section-head h2 {
+  font-size: 22px;
+  margin: 0;
+  font-weight: 600;
+}
+.section-head h2 .zh {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 0.85em;
+  margin-left: 8px;
+}
+.section-head .count {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 18px;
+  margin-bottom: 48px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 22px 22px 20px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow);
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+  min-height: 200px;
+}
+.card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 2px 4px rgba(0,0,0,.04), 0 12px 24px rgba(178,85,48,.10);
+}
+.card .tag {
+  display: inline-block;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 4px 10px;
+  border-radius: 999px;
+  align-self: flex-start;
+  margin-bottom: 14px;
+  font-weight: 600;
+}
+.card .date {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  letter-spacing: 0.04em;
+}
+.card h3 {
+  font-size: 19px;
+  margin: 0 0 6px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.card .zh-title {
+  font-size: 15px;
+  color: var(--muted);
+  margin: 0 0 12px;
+  font-weight: 500;
+}
+.card .desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.55;
+  margin: 0 0 16px;
+  flex-grow: 1;
+}
+.card .features {
+  display: flex;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px dashed var(--rule);
+}
+.card .features span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.empty {
+  border: 1px dashed var(--rule);
+  border-radius: 14px;
+  padding: 36px 22px;
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+footer {
+  margin-top: 60px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .wrap { padding: 18px 16px 80px; }
+  .hero { padding: 36px 0 28px; }
+  .grid { gap: 14px; }
+  .card { padding: 18px; min-height: 180px; }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand"><b>Ridgeway Church</b> · Resources · 資源庫</div>
+  <div class="controls">
+    <button id="themeBtn" aria-label="Toggle theme">☾ Night</button>
+  </div>
+</div>
+
+<div class="wrap">
+
+<header class="hero">
+  <div class="eyebrow">Cantonese Ministry · 廣東話團契</div>
+  <h1>Ridgeway Church Resources<span class="zh">廣道教會 · 資源庫</span></h1>
+  <p class="lead">Sermons, study notes, and special events — bilingual transcripts with audio.<br>主日講道、研經筆記同特別聚會 · 中英對照 · 附廣東話錄音。</p>
+</header>
+
+<section>
+  <div class="section-head">
+    <h2>Special Events <span class="zh">特別聚會</span></h2>
+    <span class="count">1 entry</span>
+  </div>
+  <div class="grid">
+
+    <a class="card" href="away-day-2026/">
+      <span class="tag">Away Day · 退修日</span>
+      <div class="date">May 2026</div>
+      <h3>Thematic Bible Overview: REST</h3>
+      <div class="zh-title">主題聖經導覽：安息</div>
+      <p class="desc">A four-part journey through Scripture's teaching on rest — from creation, through Israel's sabbath, into Christ's invitation, and on to our daily life today.</p>
+      <div class="features">
+        <span>📖 Bilingual</span>
+        <span>🎧 4 audio segments</span>
+        <span>~30 min</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Sunday Sermons <span class="zh">主日講道</span></h2>
+    <span class="count">Coming soon</span>
+  </div>
+  <div class="empty">
+    Sunday sermon transcripts and Cantonese audio will appear here as they are recorded.<br>主日講道嘅中英對照同廣東話錄音將會陸續上載。
+  </div>
+</section>
+
+<footer>
+  <p>
+    Curated by Anzon Wong · 黃元浩<br>
+    For the Cantonese-speaking community at <a href="https://ridgewaychurch.net" target="_blank" rel="noopener">Ridgeway Church</a>, St Albans.
+  </p>
+  <p style="margin-top: 12px; font-size: 12px;">
+    All Scripture quotations from public-domain or properly licensed translations.
+  </p>
+</footer>
+
+</div>
+
+<script>
+const themeBtn = document.getElementById('themeBtn');
+const root = document.documentElement;
+const saved = localStorage.getItem('ridgeway-theme');
+if (saved) root.setAttribute('data-theme', saved);
+function syncBtn() {
+  const t = root.getAttribute('data-theme');
+  themeBtn.textContent = t === 'night' ? '☼ Day' : '☾ Night';
+}
+syncBtn();
+themeBtn.addEventListener('click', () => {
+  const t = root.getAttribute('data-theme') === 'night' ? 'day' : 'night';
+  root.setAttribute('data-theme', t);
+  localStorage.setItem('ridgeway-theme', t);
+  syncBtn();
+});
+</script>
+
+</body>
+</html>
