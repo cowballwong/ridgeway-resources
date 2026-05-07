@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ridgeway Church Resources · 廣道教會資源</title>
-<meta name="description" content="Sermons, study notes, and special events from Ridgeway Church Cantonese ministry.">
+<title>Ridgeway · 教會資源庫</title>
+<meta name="description" content="Sunday sermon transcripts, study notes and special-event materials for the Cantonese ministry at Ridgeway Church, St Albans.">
 <style>
 :root {
   --fs: 17px;
@@ -15,7 +15,6 @@
   --accent: #b25530;
   --accent-soft: #e8d8cf;
   --rule: #e6dfd5;
-  --quote-bg: #f3ece1;
   --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 14px rgba(45,42,37,.05);
 }
 [data-theme="night"] {
@@ -26,7 +25,6 @@
   --accent: #e9956a;
   --accent-soft: #3a2a22;
   --rule: #2a2d31;
-  --quote-bg: #232427;
   --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
 }
 * { box-sizing: border-box; }
@@ -191,6 +189,7 @@ body {
 }
 .card .features {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
   font-size: 12px;
   color: var(--muted);
@@ -202,15 +201,6 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-}
-
-.empty {
-  border: 1px dashed var(--rule);
-  border-radius: 14px;
-  padding: 36px 22px;
-  text-align: center;
-  color: var(--muted);
-  font-size: 14px;
 }
 
 footer {
@@ -236,7 +226,7 @@ footer a:hover { text-decoration: underline; }
 <body>
 
 <div class="topbar">
-  <div class="brand"><b>Ridgeway Church</b> · Resources · 資源庫</div>
+  <div class="brand"><b>Ridgeway</b> · 教會資源庫</div>
   <div class="controls">
     <button id="themeBtn" aria-label="Toggle theme">☾ Night</button>
   </div>
@@ -246,9 +236,87 @@ footer a:hover { text-decoration: underline; }
 
 <header class="hero">
   <div class="eyebrow">Cantonese Ministry · 廣東話團契</div>
-  <h1>Ridgeway Church Resources<span class="zh">廣道教會 · 資源庫</span></h1>
-  <p class="lead">Sermons, study notes, and special events — bilingual transcripts with audio.<br>主日講道、研經筆記同特別聚會 · 中英對照 · 附廣東話錄音。</p>
+  <h1>Ridgeway Resources<span class="zh">教會資源庫</span></h1>
+  <p class="lead">Sunday sermons, study notes and special-event materials.<br>主日講道、研經筆記同特別聚會 · 中英對照 · 附廣東話錄音。</p>
 </header>
+
+<section>
+  <div class="section-head">
+    <h2>Sunday Sermons <span class="zh">主日講道</span></h2>
+    <span class="count">6 entries</span>
+  </div>
+  <div class="grid">
+
+    <a class="card" href="sermons/2026-05-03-rest-is-coming/">
+      <span class="tag">Sermon · 主日</span>
+      <div class="date">3 May 2026</div>
+      <h3>Rest is Coming</h3>
+      <div class="zh-title">安息將至 · Hebrews 4:1-13</div>
+      <p class="desc">Hebrews series — the rest that remains for the people of God, and the warning of unbelief that keeps a generation from entering it.</p>
+      <div class="features">
+        <span>📖 Bilingual</span>
+        <span>🎧 Cantonese audio</span>
+      </div>
+    </a>
+
+    <a class="card" href="sermons/2026-04-26-finishing-well/">
+      <span class="tag">Sermon · 主日</span>
+      <div class="date">26 Apr 2026</div>
+      <h3>Finishing Well</h3>
+      <div class="zh-title">善始善終 · Hebrews 3:7-19</div>
+      <p class="desc">Hebrews series — daily exhortation, hardened hearts, and what it takes to hold firm to the end.</p>
+      <div class="features">
+        <span>📖 Bilingual</span>
+        <span>🎧 Cantonese audio</span>
+      </div>
+    </a>
+
+    <a class="card" href="sermons/2026-04-19-dont-look-elsewhere/">
+      <span class="tag">Sermon · 主日</span>
+      <div class="date">19 Apr 2026</div>
+      <h3>Don't Look Elsewhere</h3>
+      <div class="zh-title">不要看別處 · Hebrews 3:1-6</div>
+      <p class="desc">Hebrews series — Jesus, greater than Moses, the apostle and high priest of our confession.</p>
+      <div class="features">
+        <span>📖 Bilingual</span>
+      </div>
+    </a>
+
+    <a class="card" href="sermons/2026-04-02-value-of-the-cross/">
+      <span class="tag">Good Friday · 受難日</span>
+      <div class="date">2 Apr 2026</div>
+      <h3>The Value of the Cross</h3>
+      <div class="zh-title">十字架的價值</div>
+      <p class="desc">Good Friday — looking past the appearance of an unjust death to see why the cross is the most treasured symbol of the Christian faith.</p>
+      <div class="features">
+        <span>📖 Bilingual</span>
+      </div>
+    </a>
+
+    <a class="card" href="sermons/2026-03-29-one-of-us-part-1/">
+      <span class="tag">Sermon · 主日</span>
+      <div class="date">29 Mar 2026</div>
+      <h3>One of Us (Part 1)</h3>
+      <div class="zh-title">我們當中的一位（上）· Hebrews 2:5-9</div>
+      <p class="desc">Hebrews series — salvation as God's restoration of humanity, begun in the One who became one of us.</p>
+      <div class="features">
+        <span>📖 Bilingual</span>
+      </div>
+    </a>
+
+    <a class="card" href="sermons/2026-01-04-psalm-16/">
+      <span class="tag">Sermon · 主日</span>
+      <div class="date">4 Jan 2026</div>
+      <h3>The LORD our refuge</h3>
+      <div class="zh-title">耶和華是我們的避難所 · Psalm 16</div>
+      <p class="desc">A psalm for an age of insecurity — David's prayer of trust and the surer way of life he points us toward.</p>
+      <div class="features">
+        <span>📖 Bilingual</span>
+      </div>
+    </a>
+
+  </div>
+</section>
 
 <section>
   <div class="section-head">
@@ -273,24 +341,9 @@ footer a:hover { text-decoration: underline; }
   </div>
 </section>
 
-<section>
-  <div class="section-head">
-    <h2>Sunday Sermons <span class="zh">主日講道</span></h2>
-    <span class="count">Coming soon</span>
-  </div>
-  <div class="empty">
-    Sunday sermon transcripts and Cantonese audio will appear here as they are recorded.<br>主日講道嘅中英對照同廣東話錄音將會陸續上載。
-  </div>
-</section>
-
 <footer>
-  <p>
-    Curated by Anzon Wong · 黃元浩<br>
-    For the Cantonese-speaking community at <a href="https://ridgewaychurch.net" target="_blank" rel="noopener">Ridgeway Church</a>, St Albans.
-  </p>
-  <p style="margin-top: 12px; font-size: 12px;">
-    All Scripture quotations from public-domain or properly licensed translations.
-  </p>
+  <p>For the Cantonese-speaking community at <a href="https://ridgewaychurch.net" target="_blank" rel="noopener">Ridgeway Church</a>, St Albans.</p>
+  <p style="margin-top: 12px; font-size: 12px;">All Scripture quotations from public-domain or properly licensed translations.</p>
 </footer>
 
 </div>
