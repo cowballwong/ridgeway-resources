@@ -72,6 +72,18 @@ body {
   border-bottom: 1px solid var(--rule);
   margin-bottom: 36px;
 }
+.hero-logo {
+  display: block;
+  margin: 0 auto 20px;
+  max-width: 220px;
+  width: 60%;
+  height: auto;
+  transition: filter .25s;
+}
+[data-theme="night"] .hero-logo { filter: brightness(0) invert(1) opacity(0.92); }
+@media (max-width: 600px) {
+  .hero-logo { max-width: 180px; margin-bottom: 16px; }
+}
 .hero .eyebrow {
   color: var(--accent);
   font-size: 13px;
@@ -255,8 +267,9 @@ footer a:hover { text-decoration: underline; }
 <div class="wrap">
 
 <header class="hero">
+  <img class="hero-logo" src="assets/ridgeway-logo.png" alt="Ridgeway Church, St Albans">
   <div class="eyebrow">Cantonese Ministry · 廣東話團契</div>
-  <h1>Ridgeway Resources<span class="zh">教會資源庫</span></h1>
+  <h1>Resources<span class="zh">教會資源庫</span></h1>
   <p class="lead">Sunday sermons, study notes and special-event materials.<br>主日講道、研經筆記同特別聚會 · 中英對照 · 附廣東話錄音。</p>
 </header>
 
