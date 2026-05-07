@@ -299,6 +299,36 @@ details.transcript .narrative blockquote {
   box-shadow: 0 1px 4px rgba(178,85,48,.3);
 }
 .audio-bar .tab .num { font-weight: 700; margin-right: 4px; }
+.audio-bar .tab .tab-en { display: none; margin-left: 4px; }
+.audio-bar[data-lang="en"] .tab .tab-zh { display: none; }
+.audio-bar[data-lang="en"] .tab .tab-en { display: inline; margin-left: 0; }
+
+.audio-bar .lang-toggle {
+  display: inline-flex;
+  background: var(--bg);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 2px;
+  gap: 2px;
+}
+.audio-bar .lang-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s, color .15s;
+}
+.audio-bar .lang-btn:hover { color: var(--ink); }
+.audio-bar .lang-btn.active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 1px 3px rgba(178,85,48,.3);
+}
+
 .audio-bar .player audio {
   width: 100%;
   height: 36px;
@@ -957,14 +987,17 @@ body > .topbar { padding-left: 140px !important; }
 <div class="audio-bar" id="audioBar">
   <div class="inner">
     <div class="header">
-      <span>🎧 <b>Cantonese Audio</b> · 廣東話錄音 · MiniMax T2A v2</span>
-      <span id="audioMeta">~35 min total</span>
+      <span>🎧 <b id="audioTitle">廣東話錄音</b> · <span id="audioEngine">MiniMax T2A v2</span></span>
+      <div class="lang-toggle" id="langToggle" role="group" aria-label="Audio language">
+        <button class="lang-btn active" data-lang="zh">廣東話</button>
+        <button class="lang-btn"        data-lang="en">English</button>
+      </div>
     </div>
     <div class="tabs" id="audioTabs">
-      <button class="tab active" data-src="audio/segment_1_intro.mp3"        data-label="第一段：引言"><span class="num">1</span>引言 Intro</button>
-      <button class="tab"        data-src="audio/segment_2_old_testament.mp3" data-label="第二段：舊約裡面的安息"><span class="num">2</span>舊約 Part 1</button>
-      <button class="tab"        data-src="audio/segment_3_new_testament.mp3" data-label="第三段：新約裡面的安息"><span class="num">3</span>新約 Part 2</button>
-      <button class="tab"        data-src="audio/segment_4_application.mp3"   data-label="第四段：對我們現在的意義"><span class="num">4</span>應用 Part 3</button>
+      <button class="tab active" data-seg="segment_1_intro"         data-label-zh="第一段：引言"          data-label-en="Segment 1 · Intro"><span class="num">1</span><span class="tab-zh">引言</span><span class="tab-en">Intro</span></button>
+      <button class="tab"        data-seg="segment_2_old_testament" data-label-zh="第二段：舊約裡面的安息" data-label-en="Segment 2 · Old Testament"><span class="num">2</span><span class="tab-zh">舊約</span><span class="tab-en">Part 1</span></button>
+      <button class="tab"        data-seg="segment_3_new_testament" data-label-zh="第三段：新約裡面的安息" data-label-en="Segment 3 · New Testament"><span class="num">3</span><span class="tab-zh">新約</span><span class="tab-en">Part 2</span></button>
+      <button class="tab"        data-seg="segment_4_application"   data-label-zh="第四段：對我們現在的意義" data-label-en="Segment 4 · Application"><span class="num">4</span><span class="tab-zh">應用</span><span class="tab-en">Part 3</span></button>
     </div>
     <div class="player">
       <div class="now" id="nowPlaying">▶ 第一段：引言</div>
@@ -1009,22 +1042,66 @@ body > .topbar { padding-left: 140px !important; }
   window.addEventListener('load', padBottom);
   window.addEventListener('resize', padBottom);
 
-  // Audio segment switcher
+  // Audio segment switcher + language toggle
   const tabs = document.querySelectorAll('#audioTabs .tab');
+  const langBtns = document.querySelectorAll('#langToggle .lang-btn');
   const player = document.getElementById('audioPlayer');
   const nowPlaying = document.getElementById('nowPlaying');
+  const audioTitle = document.getElementById('audioTitle');
+  const audioEngine = document.getElementById('audioEngine');
+  const audioBar = document.getElementById('audioBar');
+
+  let currentLang = localStorage.getItem('awayday_lang') || 'zh';
+  let currentSeg = 'segment_1_intro';
+
+  function srcFor(seg, lang) {
+    return 'audio/' + seg + (lang === 'en' ? '_en.mp3' : '.mp3');
+  }
+  function labelFor(tab, lang) {
+    return tab.getAttribute(lang === 'en' ? 'data-label-en' : 'data-label-zh');
+  }
+  function applyLang() {
+    audioBar.setAttribute('data-lang', currentLang);
+    audioTitle.textContent = currentLang === 'en' ? 'English Narration' : '廣東話錄音';
+    audioEngine.textContent = currentLang === 'en' ? 'ElevenLabs · Alice (British)' : 'MiniMax T2A v2';
+    langBtns.forEach(b => b.classList.toggle('active', b.dataset.lang === currentLang));
+    const activeTab = document.querySelector('#audioTabs .tab.active');
+    if (activeTab) {
+      const wasPlaying = !player.paused;
+      const t = player.currentTime;
+      player.src = srcFor(activeTab.dataset.seg, currentLang);
+      nowPlaying.textContent = '▶ ' + labelFor(activeTab, currentLang);
+      if (wasPlaying) {
+        player.addEventListener('loadedmetadata', () => {
+          player.currentTime = Math.min(t, player.duration || t);
+          player.play().catch(() => {});
+        }, { once: true });
+      }
+    }
+    padBottom();
+  }
+
+  langBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      currentLang = btn.dataset.lang;
+      localStorage.setItem('awayday_lang', currentLang);
+      applyLang();
+    });
+  });
+
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
-      const src = tab.getAttribute('data-src');
-      const label = tab.getAttribute('data-label');
-      player.src = src;
-      nowPlaying.textContent = '▶ ' + label;
+      currentSeg = tab.dataset.seg;
+      player.src = srcFor(currentSeg, currentLang);
+      nowPlaying.textContent = '▶ ' + labelFor(tab, currentLang);
       player.play().catch(() => { /* user gesture may be required */ });
       padBottom();
     });
   });
+
+  applyLang();
 })();
 </script>
 
