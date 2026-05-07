@@ -132,6 +132,7 @@ body {
 }
 
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: var(--card);
@@ -143,6 +144,25 @@ body {
   box-shadow: var(--shadow);
   transition: transform .18s, border-color .18s, box-shadow .18s;
   min-height: 200px;
+  overflow: hidden;
+}
+.card.is-special {
+  border-color: var(--accent);
+  background: linear-gradient(180deg, var(--accent-soft) 0%, var(--card) 60%);
+}
+.card.is-special .special-badge {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: var(--accent);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  padding: 5px 11px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(178,85,48,.35);
 }
 .card:hover {
   transform: translateY(-2px);
@@ -242,6 +262,30 @@ footer a:hover { text-decoration: underline; }
 
 <section>
   <div class="section-head">
+    <h2>Special Events <span class="zh">特別聚會</span></h2>
+    <span class="count">1 entry</span>
+  </div>
+  <div class="grid">
+
+    <a class="card is-special" href="away-day-2026/">
+      <span class="special-badge">★ Special</span>
+      <span class="tag">Away Day · 退修日</span>
+      <div class="date">May 2026</div>
+      <h3>Thematic Bible Overview: REST</h3>
+      <div class="zh-title">主題聖經導覽：安息</div>
+      <p class="desc">A four-part journey through Scripture's teaching on rest — from creation, through Israel's sabbath, into Christ's invitation, and on to our daily life today.</p>
+      <div class="features">
+        <span>📖 Bilingual</span>
+        <span>🎧 4 audio segments</span>
+        <span>~30 min</span>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
     <h2>Sunday Sermons <span class="zh">主日講道</span></h2>
     <span class="count">6 entries</span>
   </div>
@@ -312,29 +356,6 @@ footer a:hover { text-decoration: underline; }
       <p class="desc">A psalm for an age of insecurity — David's prayer of trust and the surer way of life he points us toward.</p>
       <div class="features">
         <span>📖 Bilingual</span>
-      </div>
-    </a>
-
-  </div>
-</section>
-
-<section>
-  <div class="section-head">
-    <h2>Special Events <span class="zh">特別聚會</span></h2>
-    <span class="count">1 entry</span>
-  </div>
-  <div class="grid">
-
-    <a class="card" href="away-day-2026/">
-      <span class="tag">Away Day · 退修日</span>
-      <div class="date">May 2026</div>
-      <h3>Thematic Bible Overview: REST</h3>
-      <div class="zh-title">主題聖經導覽：安息</div>
-      <p class="desc">A four-part journey through Scripture's teaching on rest — from creation, through Israel's sabbath, into Christ's invitation, and on to our daily life today.</p>
-      <div class="features">
-        <span>📖 Bilingual</span>
-        <span>🎧 4 audio segments</span>
-        <span>~30 min</span>
       </div>
     </a>
 
