@@ -309,7 +309,7 @@ footer a:hover { text-decoration: underline; }
 <section>
   <div class="section-head">
     <h2>Special Events <span class="zh">特別聚會</span></h2>
-    <span class="count">1 entry</span>
+    <span class="count">2 entries</span>
   </div>
   <div class="grid">
 
@@ -324,6 +324,20 @@ footer a:hover { text-decoration: underline; }
         <span>📖 Bilingual</span>
         <span>🎧 4 audio segments</span>
         <span>~30 min</span>
+      </div>
+    </article>
+
+    <article class="card is-special" data-href="https://cowballwong.github.io/worship-music/" data-external="1" tabindex="0">
+      <span class="special-badge">🎸 Music</span>
+      <span class="tag">Worship Music · 樂譜庫</span>
+      <div class="date">Live</div>
+      <h3>Music Resource</h3>
+      <div class="zh-title">敬拜樂譜庫</div>
+      <p class="desc">Searchable library of guitar lead sheets and Sunday set lists. Annotate on tablet with Apple Pencil — chord notes, capo markings, highlights save back to the file.</p>
+      <div class="features">
+        <span>📚 100+ songs</span>
+        <span>📅 Sunday playlists</span>
+        <span>✏️ Tap to edit</span>
       </div>
     </article>
 
@@ -452,13 +466,15 @@ themeBtn.addEventListener('click', () => {
 document.querySelectorAll('.card[data-href]').forEach(card => {
   card.addEventListener('click', e => {
     if (e.target.closest('.card-watch')) return;
-    window.location.href = card.dataset.href;
+    if (card.dataset.external) window.open(card.dataset.href, '_blank', 'noopener');
+    else window.location.href = card.dataset.href;
   });
   card.addEventListener('keydown', e => {
     if (e.key === 'Enter' || e.key === ' ') {
       if (e.target.closest('.card-watch')) return;
       e.preventDefault();
-      window.location.href = card.dataset.href;
+      if (card.dataset.external) window.open(card.dataset.href, '_blank', 'noopener');
+      else window.location.href = card.dataset.href;
     }
   });
 });
