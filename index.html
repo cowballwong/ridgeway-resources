@@ -67,48 +67,52 @@ body {
 .controls button:hover { border-color: var(--accent); color: var(--accent); }
 
 .hero {
-  text-align: center;
-  padding: 56px 0 40px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 18px 0 18px;
   border-bottom: 1px solid var(--rule);
-  margin-bottom: 36px;
+  margin-bottom: 24px;
 }
 .hero-logo {
-  display: block;
-  margin: 0 auto 20px;
-  max-width: 220px;
-  width: 60%;
+  flex-shrink: 0;
+  width: 90px;
   height: auto;
   transition: filter .25s;
 }
 [data-theme="night"] .hero-logo { filter: brightness(0) invert(1) opacity(0.92); }
-@media (max-width: 600px) {
-  .hero-logo { max-width: 180px; margin-bottom: 16px; }
-}
+.hero-text { min-width: 0; }
 .hero .eyebrow {
   color: var(--accent);
-  font-size: 13px;
+  font-size: 11px;
   letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 .hero h1 {
-  font-size: clamp(32px, 5.5vw, 52px);
-  margin: 12px 0 8px;
-  line-height: 1.18;
+  font-size: clamp(20px, 3vw, 26px);
+  margin: 4px 0 2px;
+  line-height: 1.2;
   font-weight: 600;
 }
 .hero h1 .zh {
-  display: block;
   color: var(--muted);
-  font-size: 0.6em;
+  font-size: 0.85em;
   font-weight: 500;
-  margin-top: 8px;
-  letter-spacing: 0.05em;
+  margin-left: 8px;
+  letter-spacing: 0.04em;
 }
 .hero .lead {
-  font-size: 16px;
+  font-size: 13px;
   color: var(--muted);
-  max-width: 600px;
-  margin: 16px auto 0;
+  margin: 4px 0 0;
+  line-height: 1.5;
+}
+@media (max-width: 600px) {
+  .hero { padding: 14px 0; gap: 12px; }
+  .hero-logo { width: 64px; }
+  .hero h1 { font-size: 18px; }
+  .hero h1 .zh { display: block; margin: 2px 0 0; }
+  .hero .lead { font-size: 12px; }
 }
 
 .section-head {
@@ -295,9 +299,11 @@ footer a:hover { text-decoration: underline; }
 
 <header class="hero">
   <img class="hero-logo" src="assets/ridgeway-logo.png" alt="Ridgeway Church, St Albans">
-  <div class="eyebrow">Cantonese Ministry · 廣東話團契</div>
-  <h1>Resources<span class="zh">教會資源庫</span></h1>
-  <p class="lead">Sunday sermons, study notes and special-event materials.<br>主日講道、研經筆記同特別聚會 · 中英對照 · 附廣東話錄音。</p>
+  <div class="hero-text">
+    <div class="eyebrow">Cantonese Ministry · 廣東話團契</div>
+    <h1>Resources<span class="zh">教會資源庫</span></h1>
+    <p class="lead">Sunday sermons, study notes and special-event materials · 主日講道、研經筆記、特別聚會。</p>
+  </div>
 </header>
 
 <section>
