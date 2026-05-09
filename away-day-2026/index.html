@@ -272,8 +272,35 @@ details.transcript .narrative blockquote {
   justify-content: space-between;
   font-size: 12px;
   color: var(--muted);
+  gap: 8px;
+  flex-wrap: wrap;
 }
 .audio-bar .header b { color: var(--ink); }
+.audio-bar .header-right {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.audio-bar .toggle-btn {
+  background: transparent;
+  border: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-family: inherit;
+  transition: color .15s, border-color .15s;
+}
+.audio-bar .toggle-btn:hover { color: var(--accent); border-color: var(--accent); }
+.audio-bar .toggle-btn .chev { display: inline-block; transition: transform .2s; }
+.audio-bar.collapsed .toggle-btn .chev { transform: rotate(180deg); }
+.audio-bar.collapsed .tabs,
+.audio-bar.collapsed .player,
+.audio-bar.collapsed .lang-toggle { display: none; }
+.audio-bar.collapsed { padding: 6px 14px; cursor: pointer; }
+.audio-bar.collapsed .inner { gap: 0; }
 .audio-bar .tabs {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1172,9 +1199,14 @@ on shedding innocent blood and on oppression and extortion.</div><div class="zh"
   <div class="inner">
     <div class="header">
       <span>🎧 <b id="audioTitle">廣東話錄音</b> · <span id="audioEngine">MiniMax T2A v2</span></span>
-      <div class="lang-toggle" id="langToggle" role="group" aria-label="Audio language">
-        <button class="lang-btn active" data-lang="zh">廣東話</button>
-        <button class="lang-btn"        data-lang="en">English</button>
+      <div class="header-right">
+        <div class="lang-toggle" id="langToggle" role="group" aria-label="Audio language">
+          <button class="lang-btn active" data-lang="zh">廣東話</button>
+          <button class="lang-btn"        data-lang="en">English</button>
+        </div>
+        <button class="toggle-btn" id="audioToggle" type="button" aria-label="Expand or collapse player" aria-expanded="false">
+          <span class="chev">▾</span>
+        </button>
       </div>
     </div>
     <div class="tabs" id="audioTabs">
@@ -1233,6 +1265,21 @@ on shedding innocent blood and on oppression and extortion.</div><div class="zh"
   const audioTitle = document.getElementById('audioTitle');
   const audioEngine = document.getElementById('audioEngine');
   const audioBar = document.getElementById('audioBar');
+  const audioToggle = document.getElementById('audioToggle');
+
+  audioBar.classList.add('collapsed');
+  function setCollapsed(collapsed) {
+    audioBar.classList.toggle('collapsed', collapsed);
+    audioToggle.setAttribute('aria-expanded', String(!collapsed));
+    padBottom();
+  }
+  audioToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    setCollapsed(!audioBar.classList.contains('collapsed'));
+  });
+  audioBar.addEventListener('click', () => {
+    if (audioBar.classList.contains('collapsed')) setCollapsed(false);
+  });
 
   let currentLang = localStorage.getItem('awayday_lang') || 'zh';
   let currentSeg = 'talk1_old_testament';
