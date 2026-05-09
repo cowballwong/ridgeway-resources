@@ -320,48 +320,7 @@ html[data-theme="night"] .sg-section { box-shadow:none; }
 </head>
 <body>
 
-<!-- TIME GATE — release Sunday 10 May 2026 09:00 BST. Append ?preview=1 to bypass. -->
-<div id="ridgeway-gate" style="display:none;position:fixed;inset:0;background:#faf7f2;z-index:99999;font-family:'Noto Serif TC','Source Han Serif TC','PingFang TC',Georgia,serif;color:#2d2a25;padding:60px 24px;text-align:center;">
-  <div style="max-width:520px;margin:60px auto;border:1px solid #e6dfd5;border-radius:14px;padding:36px 28px;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.04),0 4px 14px rgba(45,42,37,.05);">
-    <div style="font-size:48px;line-height:1;margin-bottom:16px;">🔒</div>
-    <h1 style="font-size:22px;margin:0 0 12px;color:#b25530;">Available from Sunday morning</h1>
-    <h2 style="font-size:18px;font-weight:400;margin:0 0 20px;color:#6f6a62;">主日早上開放</h2>
-    <p style="margin:0 0 8px;font-size:16px;">This Sunday's sermon will be available from</p>
-    <p style="margin:0 0 8px;font-size:16px;color:#6f6a62;">本主日講道將於以下時間開放：</p>
-    <p style="margin:18px 0 6px;font-size:18px;font-weight:700;color:#b25530;">Sunday 10 May 2026 · 9:00 AM (BST)</p>
-    <p style="margin:0 0 22px;font-size:18px;font-weight:700;color:#b25530;">2026 年 5 月 10 日 · 主日早上 9:00</p>
-    <div id="rg-countdown" style="margin-top:20px;font-size:15px;color:#6f6a62;font-variant-numeric:tabular-nums;"></div>
-    <p style="margin-top:30px;font-size:13px;color:#9a9590;">— Ridgeway Church · St Albans</p>
-  </div>
-</div>
-<script>
-(function(){
-  var release = new Date('2026-05-10T09:00:00+01:00').getTime();
-  var qs = (location.search || '').toLowerCase();
-  if(qs.indexOf('preview=') !== -1) return;
-  var gate = document.getElementById('ridgeway-gate');
-  function check(){
-    var now = Date.now();
-    if(now < release){
-      gate.style.display = 'block';
-      document.documentElement.style.overflow = 'hidden';
-      var diff = release - now;
-      var d = Math.floor(diff/86400000);
-      var h = Math.floor((diff%86400000)/3600000);
-      var m = Math.floor((diff%3600000)/60000);
-      var s = Math.floor((diff%60000)/1000);
-      var cd = document.getElementById('rg-countdown');
-      if(cd) cd.textContent = 'Opens in ' + d + 'd ' + h + 'h ' + m + 'm ' + s + 's · 距開放尚有 ' + d + ' 日 ' + h + ' 小時 ' + m + ' 分';
-    } else {
-      gate.style.display = 'none';
-      document.documentElement.style.overflow = '';
-    }
-  }
-  check();
-  setInterval(check, 1000);
-})();
-</script>
-<!-- /TIME GATE -->
+<!-- Time gate removed 2026-05-09 — sermon now openly published. -->
 
 
 <!-- Top header with logo -->
