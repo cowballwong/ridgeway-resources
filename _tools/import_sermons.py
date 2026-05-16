@@ -51,6 +51,18 @@ SERMONS = [
         "html": "2026-05-03-Sunday Service-Rest is Coming.html",
         "audio": "2026-05-03-Sunday Service-Rest is Coming-cantonese.mp3",
     },
+    {
+        "slug": "2026-05-10-pharisee-and-tax-collector",
+        "src_folder": "2026-05-10 Pharisee and Tax Collector",
+        "html": "2026-05-10-Sunday Service-Pharisee and Tax Collector.html",
+        "audio": "2026-05-10-Sunday Service-Pharisee and Tax Collector-cantonese.mp3",
+    },
+    {
+        "slug": "2026-05-17-access-granted",
+        "src_folder": "2026-05-17 Access Granted",
+        "html": "2026-05-17-Sunday Service-Access Granted.html",
+        "audio": "2026-05-17-Sunday Service-Access Granted-cantonese.mp3",
+    },
 ]
 
 DATA_URI_RE = re.compile(
