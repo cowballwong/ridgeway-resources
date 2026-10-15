@@ -9,7 +9,7 @@ Bilingual sermon transcripts, study notes, and special-event materials for the C
 - `index.html` — landing page (English / 繁體中文)
 - `away-day-2026/` — Thematic Bible Overview: REST · 主題聖經導覽：安息
 - Sunday sermon folders will follow the pattern `sermons/YYYY-MM-DD-slug/`
-- Bible study guides follow the pattern `studies/YYYY-MM-DD-slug/` (listed under "Bible Study 查經")
+- Bible study guides follow the pattern `studies/YYYY-MM-DD-slug/` (the newest is featured in the second Features card; earlier ones are listed under "Bible Study 查經")
 
 ## Adding a Sunday sermon
 
