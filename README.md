@@ -2,7 +2,7 @@
 
 Bilingual sermon transcripts, study notes, and special-event materials for the Cantonese-speaking community at Ridgeway Church, St Albans.
 
-**Live site:** https://cowballwong.github.io/ridgeway-resources/
+**Live site:** https://anzonwong.com/ridgeway-resources/
 
 ## Structure
 
