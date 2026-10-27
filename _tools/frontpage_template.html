@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="day">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ridgeway · 教會資源庫</title>
+<meta name="description" content="Sunday sermon transcripts, study notes and special-event materials for the Cantonese ministry at Ridgeway Church, St Albans.">
+<script>
+try { var t = localStorage.getItem('ridgeway-theme'); if (t) document.documentElement.setAttribute('data-theme', t); } catch (e) {}
+document.documentElement.classList.add('js');
+</script>
+<style>
+:root {
+  --fs: 17px;
+  --bg: #faf7f2;
+  --card: #ffffff;
+  --ink: #2d2a25;
+  --muted: #6f6a62;
+  --accent: #b25530;
+  --accent-soft: #e8d8cf;
+  --rule: #e6dfd5;
+  --shadow: 0 1px 2px rgba(0,0,0,.04), 0 4px 14px rgba(45,42,37,.05);
+}
+[data-theme="night"] {
+  --bg: #15171a;
+  --card: #1d2024;
+  --ink: #ebe7df;
+  --muted: #9a9590;
+  --accent: #e9956a;
+  --accent-soft: #3a2a22;
+  --rule: #2a2d31;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 4px 14px rgba(0,0,0,.3);
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: "Noto Serif TC", "Source Han Serif TC", "PingFang TC", Georgia, serif;
+  background: var(--bg);
+  color: var(--ink);
+  font-size: var(--fs);
+  line-height: 1.7;
+  letter-spacing: 0.01em;
+  transition: background .25s, color .25s;
+  overflow-x: hidden;
+}
+.wrap { max-width: 980px; margin: 0 auto; padding: 22px 22px 100px; }
+
+/* ---------- sticky header: brand row + category bar ---------- */
+.sitebar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 10px 22px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.topbar .brand { font-size: 14px; color: var(--muted); }
+.topbar .brand b { color: var(--ink); }
+.controls button {
+  background: var(--card);
+  color: var(--ink);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background .15s, border .15s;
+}
+.controls button:hover { border-color: var(--accent); color: var(--accent); }
+
+.cats {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 22px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+.cat {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: 8px 4px 10px;
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  color: var(--muted);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  line-height: 1.25;
+  transition: color .15s, border-color .15s;
+}
+.cat .en { font-size: 14px; font-weight: 600; letter-spacing: 0.02em; }
+.cat .zh { font-size: 12px; }
+.cat:hover { color: var(--accent); }
+.cat[aria-selected="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+.cat .ext { font-size: 11px; margin-left: 2px; }
+.cat .en { position: relative; }
+.cat .dot {
+  position: absolute;
+  top: 1px;
+  right: -9px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.cat:focus-visible, .srow:focus-visible, .card:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ---------- hero (compact) ---------- */
+.hero {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 6px 0 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--rule);
+}
+.hero-logo { flex-shrink: 0; width: 72px; height: auto; transition: filter .25s; }
+[data-theme="night"] .hero-logo { filter: brightness(0) invert(1) opacity(0.92); }
+.hero-text { min-width: 0; }
+.hero .eyebrow { color: var(--accent); font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; }
+.hero h1 { font-size: clamp(20px, 3vw, 24px); margin: 2px 0; line-height: 1.2; font-weight: 600; }
+.hero h1 .zh { color: var(--muted); font-size: 0.85em; font-weight: 500; margin-left: 8px; letter-spacing: 0.04em; }
+.hero .lead { font-size: 13px; color: var(--muted); margin: 2px 0 0; line-height: 1.5; }
+
+/* ---------- panels ---------- */
+.js .panel { display: none; }
+.js .panel.active { display: block; }
+.panel + .panel { margin-top: 40px; }
+.js .panel + .panel { margin-top: 0; }
+.section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  margin: 4px 0 14px;
+  padding: 0 4px;
+}
+.section-head h2 { font-size: 22px; margin: 0; font-weight: 600; }
+.section-head h2 .zh { color: var(--muted); font-weight: 400; font-size: 0.85em; margin-left: 8px; }
+.section-head .count { font-size: 13px; color: var(--muted); letter-spacing: 0.05em; }
+.sub-head { font-size: 13px; color: var(--muted); letter-spacing: 0.12em; text-transform: uppercase; margin: 26px 4px 10px; }
+
+/* ---------- featured card ---------- */
+.featured { margin-bottom: 8px; }
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  padding: 20px 22px 18px;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: var(--shadow);
+  transition: transform .18s, border-color .18s, box-shadow .18s;
+  overflow: hidden;
+  cursor: pointer;
+}
+.card.is-special { border-color: var(--accent); background: linear-gradient(180deg, var(--accent-soft) 0%, var(--card) 60%); }
+.card .special-badge {
+  position: absolute; top: 14px; right: 14px;
+  background: var(--accent); color: #fff;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.18em;
+  padding: 5px 11px; border-radius: 999px; text-transform: uppercase;
+  box-shadow: 0 2px 6px rgba(178,85,48,.35);
+}
+[data-theme="night"] .card .special-badge { color: #1d2024; }
+.card:hover { transform: translateY(-2px); border-color: var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,.04), 0 12px 24px rgba(178,85,48,.10); }
+.card .tag {
+  display: inline-block; font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--accent); background: var(--accent-soft);
+  padding: 4px 10px; border-radius: 999px; align-self: flex-start; margin-bottom: 12px; font-weight: 600;
+}
+.card .date { font-size: 13px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.04em; }
+.card h3 { font-size: 20px; margin: 0 0 4px; line-height: 1.35; font-weight: 600; padding-right: 110px; }
+.card .zh-title { font-size: 15px; color: var(--muted); margin: 0 0 10px; font-weight: 500; }
+.card .desc { font-size: 14px; color: var(--muted); line-height: 1.55; margin: 0 0 12px; }
+.card .features {
+  display: flex; flex-wrap: wrap; gap: 10px; font-size: 12px; color: var(--muted);
+  padding-top: 10px; border-top: 1px dashed var(--rule);
+}
+
+/* ---------- search ---------- */
+.search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 4px 6px 4px 14px;
+  margin: 0 0 14px;
+  box-shadow: var(--shadow);
+}
+.search:focus-within { border-color: var(--accent); }
+.search svg { width: 16px; height: 16px; flex-shrink: 0; stroke: var(--muted); fill: none; stroke-width: 2; }
+.search input {
+  flex: 1; min-width: 0;
+  border: 0; outline: 0; background: transparent; color: var(--ink);
+  font: inherit; font-size: 16px; padding: 8px 0;
+}
+.search input::-webkit-search-cancel-button { display: none; }
+.search input::placeholder { color: var(--muted); opacity: .85; }
+.search button {
+  border: 0; background: var(--accent-soft); color: var(--accent);
+  border-radius: 999px; padding: 6px 12px; font: inherit; font-size: 13px; cursor: pointer;
+}
+.search-note { font-size: 13px; color: var(--muted); margin: -6px 6px 12px; min-height: 1em; }
+
+/* ---------- collapsible groups ---------- */
+details.grp { border-bottom: 1px solid var(--rule); }
+details.grp > summary {
+  list-style: none;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 12px 6px;
+  cursor: pointer;
+  user-select: none;
+}
+details.grp > summary::-webkit-details-marker { display: none; }
+details.grp > summary::before {
+  content: "";
+  width: 8px; height: 8px;
+  border-right: 2px solid var(--accent);
+  border-bottom: 2px solid var(--accent);
+  transform: rotate(-45deg);
+  transition: transform .15s;
+  flex-shrink: 0;
+  align-self: center;
+}
+details.grp[open] > summary::before { transform: rotate(45deg); }
+details.grp > summary .lbl { font-weight: 600; }
+details.grp > summary .lbl .zh { color: var(--muted); font-weight: 400; margin-left: 6px; font-size: .92em; }
+details.grp > summary .n { margin-left: auto; font-size: 13px; color: var(--muted); }
+details.yr > summary { font-size: 20px; border-bottom: 1px solid var(--rule); }
+details.yr { border-bottom: 0; margin-bottom: 6px; }
+details.mo { margin-left: 10px; }
+details.mo > summary { font-size: 16px; }
+.grp-body { padding: 0 0 10px; }
+
+/* ---------- compact rows ---------- */
+.srow {
+  position: relative;
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr) auto;
+  gap: 4px 14px;
+  align-items: start;
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 8px 0;
+  cursor: pointer;
+  transition: border-color .15s, transform .15s;
+}
+.srow:hover { border-color: var(--accent); transform: translateY(-1px); }
+.srow-date { font-size: 13px; color: var(--accent); letter-spacing: 0.03em; padding-top: 3px; font-weight: 600; }
+.srow-body { min-width: 0; }
+.srow h3 { font-size: 17px; margin: 0; line-height: 1.35; font-weight: 600; }
+.srow .zh-title { font-size: 14px; color: var(--muted); margin: 1px 0 0; }
+.srow .desc {
+  font-size: 13px; color: var(--muted); margin: 4px 0 0; line-height: 1.5;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.srow-tag {
+  display: inline-block; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--accent); background: var(--accent-soft); padding: 2px 8px; border-radius: 999px;
+  margin-bottom: 4px; font-weight: 600;
+}
+.card-watch {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; background: #ff0000; color: #fff;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+  border-radius: 999px; text-decoration: none; align-self: center; white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(255,0,0,.25);
+}
+.card-watch svg { width: 14px; height: 14px; fill: #fff; }
+.srow.hit h3, .srow.hit .zh-title { color: var(--ink); }
+mark { background: var(--accent-soft); color: inherit; border-radius: 3px; padding: 0 1px; }
+
+footer {
+  margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--rule);
+  text-align: center; font-size: 13px; color: var(--muted); line-height: 1.7;
+}
+footer a { color: var(--accent); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+
+@media (max-width: 600px) {
+  .wrap { padding: 14px 16px 80px; }
+  .topbar { padding: 8px 16px 4px; }
+  .cats { padding: 0 8px; gap: 0; }
+  .cat .en { font-size: 13px; }
+  .cat .zh { font-size: 11px; }
+  .hero { gap: 12px; padding: 4px 0 14px; margin-bottom: 14px; }
+  .hero-logo { width: 52px; }
+  .hero h1 { font-size: 18px; }
+  .hero h1 .zh { margin-left: 6px; }
+  .hero .lead { display: none; }
+  .card { padding: 16px; }
+  .card h3 { font-size: 18px; padding-right: 0; margin-top: 4px; }
+  .card .special-badge { position: static; align-self: flex-start; margin-bottom: 10px; }
+  .srow { grid-template-columns: minmax(0, 1fr) auto; padding: 10px 12px; gap: 2px 10px; }
+  .srow-date { grid-column: 1 / -1; padding-top: 0; font-size: 12px; }
+  .srow .desc { display: none; }
+  .card-watch { padding: 3px 8px; }
+  details.mo { margin-left: 4px; }
+}
+</style>
+</head>
+<body>
+
+<header class="sitebar">
+  <div class="topbar">
+    <div class="brand"><b>Ridgeway</b> · 教會資源庫</div>
+    <div class="controls">
+      <button id="themeBtn" type="button" aria-label="Toggle day / night theme">☾ Night</button>
+    </div>
+  </div>
+  <nav class="cats" role="tablist" aria-label="Categories · 分類">
+    <a class="cat" role="tab" href="#sermons" data-tab="sermons" aria-selected="true"><span class="en">Sermon</span><span class="zh">主日講道</span></a>
+    <a class="cat" role="tab" href="#studies" data-tab="studies" aria-selected="false"><span class="en">Bible Study</span><span class="zh">查經</span></a>
+    <a class="cat" href="https://anzonwong.com/worship-music/"><span class="en">Music<span class="ext" aria-hidden="true">↗</span></span><span class="zh">敬拜樂譜</span></a>
+    <a class="cat" role="tab" href="#special" data-tab="special" aria-selected="false"><span class="en">Special</span><span class="zh">特別聚會</span></a>
+  </nav>
+</header>
+
+<div class="wrap">
+
+<div class="hero">
+  <img class="hero-logo" src="assets/ridgeway-logo.png" alt="Ridgeway Church, St Albans">
+  <div class="hero-text">
+    <div class="eyebrow">Cantonese Ministry · 廣東話團契</div>
+    <h1>Resources<span class="zh">教會資源庫</span></h1>
+    <p class="lead">Sunday sermons, Bible studies and special-event materials · 主日講道、查經、特別聚會。</p>
+  </div>
+</div>
+
+<!-- ======================= SERMONS ======================= -->
+<section id="sermons" class="panel active" role="tabpanel" aria-label="Sermons · 主日講道">
+  <div class="section-head">
+    <h2>Sunday Sermons <span class="zh">主日講道</span></h2>
+    <span class="count" data-count-for="sermon-rows"></span>
+  </div>
+
+  <div class="featured" id="sermon-featured">
+{{FEATURED_SERMON}}
+  </div>
+
+  <div class="sub-head">Archive · 講道庫</div>
+  <label class="search" for="sermonSearch">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+    <input id="sermonSearch" type="search" autocomplete="off" placeholder="Search title, passage, date · 搜尋標題、經文、日期">
+    <button type="button" id="sermonClear" hidden>Clear · 清除</button>
+  </label>
+  <div class="search-note" id="sermonNote" aria-live="polite"></div>
+
+  <div class="rows" id="sermon-rows" data-groupby="month">
+<!-- SERMON-ROWS: one <article class="srow"> per sermon, any order (the page sorts by data-date).
+     sermon_watcher.py inserts each new sermon's row directly below this line. -->
+{{SERMON_ROWS}}
+  </div>
+</section>
+
+<!-- ======================= BIBLE STUDY ======================= -->
+<section id="studies" class="panel" role="tabpanel" aria-label="Bible Study · 查經">
+  <div class="section-head">
+    <h2>Bible Study <span class="zh">查經</span></h2>
+    <span class="count" data-count-for="study-rows"></span>
+  </div>
+
+  <div class="featured">
+{{FEATURED_STUDY}}
+  </div>
+
+  <div class="sub-head">By topic · 按主題</div>
+  <div class="rows" id="study-rows" data-groupby="attr">
+{{STUDY_ROWS}}
+  </div>
+</section>
+
+<!-- ======================= SPECIAL ======================= -->
+<section id="special" class="panel" role="tabpanel" aria-label="Special events · 特別聚會">
+  <div class="section-head">
+    <h2>Special Events <span class="zh">特別聚會</span></h2>
+    <span class="count" data-count-for="special-rows"></span>
+  </div>
+  <div class="rows" id="special-rows" data-groupby="attr">
+{{SPECIAL_ROWS}}
+  </div>
+</section>
+
+<footer>
+  <p>For the Cantonese-speaking community at <a href="https://ridgewaychurch.net" target="_blank" rel="noopener">Ridgeway Church</a>, St Albans.</p>
+  <p style="margin-top: 12px; font-size: 12px;">All Scripture quotations from public-domain or properly licensed translations.</p>
+</footer>
+
+</div>
+
+<script>
+(function () {
+  const root = document.documentElement;
+
+  /* ---------- day / night ---------- */
+  const themeBtn = document.getElementById('themeBtn');
+  function syncBtn() { themeBtn.textContent = root.getAttribute('data-theme') === 'night' ? '☼ Day' : '☾ Night'; }
+  syncBtn();
+  themeBtn.addEventListener('click', () => {
+    const t = root.getAttribute('data-theme') === 'night' ? 'day' : 'night';
+    root.setAttribute('data-theme', t);
+    try { localStorage.setItem('ridgeway-theme', t); } catch (e) {}
+    syncBtn();
+  });
+
+  /* ---------- whole card / row is a link ---------- */
+  function go(el) {
+    if (el.dataset.external) window.open(el.dataset.href, '_blank', 'noopener');
+    else window.location.href = el.dataset.href;
+  }
+  document.addEventListener('click', e => {
+    if (e.target.closest('a')) return;
+    const el = e.target.closest('[data-href]');
+    if (el) go(el);
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    const el = e.target.closest && e.target.closest('[data-href]');
+    if (!el || e.target.closest('a')) return;
+    e.preventDefault();
+    go(el);
+  });
+
+  /* ---------- grouping ---------- */
+  const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const MON = MONTHS.map(m => m.slice(0, 3));
+  const ZH_NUM = ['一','二','三','四','五','六','七','八','九','十','十一','十二'];
+
+  function el(tag, cls, html) { const n = document.createElement(tag); if (cls) n.className = cls; if (html != null) n.innerHTML = html; return n; }
+  function group(cls, key, labelHtml, rows, open) {
+    const d = el('details', 'grp ' + cls);
+    d.dataset.key = key;
+    if (open) d.open = true;
+    d.dataset.defaultOpen = open ? '1' : '';
+    const s = el('summary', null, '<span class="lbl">' + labelHtml + '</span><span class="n">' + rows.length + '</span>');
+    d.appendChild(s);
+    const body = el('div', 'grp-body');
+    rows.forEach(r => body.appendChild(r));
+    d.appendChild(body);
+    return d;
+  }
+  function rowsOf(box) {
+    return Array.from(box.querySelectorAll(':scope > .srow'))
+      .sort((a, b) => (b.dataset.date || '').localeCompare(a.dataset.date || ''));
+  }
+  function setCount(box, n) {
+    const c = document.querySelector('[data-count-for="' + box.id + '"]');
+    if (c) c.textContent = n + (n === 1 ? ' entry · 1 篇' : ' entries · ' + n + ' 篇');
+  }
+
+  function groupByMonth(box) {
+    const rows = rowsOf(box);
+    setCount(box, rows.length);
+    const years = new Map();
+    rows.forEach(r => {
+      const [y, m] = r.dataset.date.split('-');
+      if (!years.has(y)) years.set(y, new Map());
+      const months = years.get(y);
+      if (!months.has(m)) months.set(m, []);
+      months.get(m).push(r);
+    });
+    box.textContent = '';
+    let first = true;
+    years.forEach((months, y) => {
+      const yRows = [].concat(...months.values());
+      const monthEls = [];
+      months.forEach((mRows, m) => {
+        const mi = parseInt(m, 10) - 1;
+        monthEls.push(group('mo', y + '-' + m, MONTHS[mi] + '<span class="zh">' + ZH_NUM[mi] + '月</span>', mRows, first));
+        first = false;
+      });
+      const yd = group('yr', y, y + '<span class="zh">' + y + '年</span>', [], years.keys().next().value === y);
+      yd.querySelector('.n').textContent = yRows.length;
+      const body = yd.querySelector('.grp-body');
+      monthEls.forEach(m => body.appendChild(m));
+      box.appendChild(yd);
+    });
+  }
+
+  function groupByAttr(box) {
+    const rows = rowsOf(box);
+    setCount(box, rows.length);
+    const groups = new Map();
+    rows.forEach(r => {
+      const k = r.dataset.group || 'other';
+      if (!groups.has(k)) groups.set(k, { label: r.dataset.groupLabel || k, rows: [] });
+      groups.get(k).rows.push(r);
+    });
+    box.textContent = '';
+    groups.forEach((g, k) => {
+      const [en, zh] = g.label.split(' · ');
+      box.appendChild(group('topic', k, en + (zh ? '<span class="zh">' + zh + '</span>' : ''), g.rows, true));
+    });
+  }
+
+  document.querySelectorAll('.rows[data-groupby]').forEach(box => {
+    if (box.dataset.groupby === 'month') groupByMonth(box); else groupByAttr(box);
+  });
+
+  /* ---------- sermon search (English + 中文) ---------- */
+  const BOOKS = {
+    'genesis': '創世記', 'exodus': '出埃及記', 'psalm': '詩篇', 'psalms': '詩篇', 'proverbs': '箴言',
+    'isaiah': '以賽亞書', 'jeremiah': '耶利米書', 'lamentations': '耶利米哀歌', 'daniel': '但以理書',
+    'matthew': '馬太福音', 'mark': '馬可福音', 'luke': '路加福音', 'john': '約翰福音', 'acts': '使徒行傳',
+    'romans': '羅馬書', '1 corinthians': '哥林多前書', '2 corinthians': '哥林多後書', 'galatians': '加拉太書',
+    'ephesians': '以弗所書', 'philippians': '腓立比書', 'colossians': '歌羅西書', '1 timothy': '提摩太前書',
+    '2 timothy': '提摩太後書', 'hebrews': '希伯來書', 'james': '雅各書', '1 peter': '彼得前書', 'revelation': '啟示錄',
+    'good friday': '受難日'
+  };
+  const sBox = document.getElementById('sermon-rows');
+  const sRows = Array.from(sBox.querySelectorAll('.srow'));
+  sRows.forEach(r => {
+    let hay = r.textContent.replace(/\s+/g, ' ').toLowerCase();
+    const low = hay;
+    Object.keys(BOOKS).forEach(k => { if (low.includes(k) || hay.includes(BOOKS[k])) hay += ' ' + k + ' ' + BOOKS[k]; });
+    const [y, m, d] = (r.dataset.date || '').split('-');
+    const mi = parseInt(m, 10) - 1, di = parseInt(d, 10);
+    hay += ' ' + r.dataset.date + ' ' + di + ' ' + MONTHS[mi] + ' ' + y + ' ' + di + ' ' + MON[mi] + ' ' + y +
+           ' ' + MONTHS[mi] + ' ' + di + ' ' + di + '/' + (mi + 1) + '/' + y + ' ' +
+           y + '年' + (mi + 1) + '月' + di + '日 ' + (mi + 1) + '月' + di + '日 ' + ZH_NUM[mi] + '月';
+    r.dataset.hay = hay.toLowerCase();
+  });
+  const input = document.getElementById('sermonSearch');
+  const clearBtn = document.getElementById('sermonClear');
+  const note = document.getElementById('sermonNote');
+
+  function applySearch() {
+    const q = input.value.trim().toLowerCase();
+    clearBtn.hidden = !q;
+    const terms = q.split(/\s+/).filter(Boolean);
+    let hits = 0;
+    sRows.forEach(r => {
+      const ok = !terms.length || terms.every(t => r.dataset.hay.includes(t));
+      r.hidden = !ok;
+      if (ok) hits++;
+    });
+    sBox.querySelectorAll('details.grp').forEach(g => {
+      const visible = g.querySelectorAll('.srow:not([hidden])').length;
+      g.hidden = !!terms.length && !visible;
+      g.open = terms.length ? visible > 0 : !!g.dataset.defaultOpen;
+      g.querySelector(':scope > summary .n').textContent = terms.length ? visible : g.querySelectorAll('.srow').length;
+    });
+    note.textContent = terms.length
+      ? (hits ? hits + ' found · 找到 ' + hits + ' 篇' : 'No match · 找不到相關講道')
+      : '';
+  }
+  input.addEventListener('input', applySearch);
+  clearBtn.addEventListener('click', e => { e.preventDefault(); input.value = ''; applySearch(); input.focus(); });
+
+  /* ---------- tabs ---------- */
+  const tabs = Array.from(document.querySelectorAll('.cat[data-tab]'));
+  function show(name) {
+    if (!document.getElementById(name)) name = 'sermons';
+    tabs.forEach(t => t.setAttribute('aria-selected', t.dataset.tab === name ? 'true' : 'false'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.id === name));
+  }
+  tabs.forEach(t => t.addEventListener('click', e => {
+    e.preventDefault();
+    history.replaceState(null, '', '#' + t.dataset.tab);
+    show(t.dataset.tab);
+    window.scrollTo({ top: 0 });
+  }));
+  window.addEventListener('hashchange', () => show(location.hash.slice(1)));
+  show(location.hash.slice(1));
+
+  /* small dot on Bible Study when the newest study is under 10 days old */
+  const latest = Array.from(document.querySelectorAll('#studies .srow')).map(r => r.dataset.date).sort().pop();
+  if (latest && (Date.now() - new Date(latest + 'T00:00:00').getTime()) < 10 * 864e5) {
+    const t = document.querySelector('.cat[data-tab="studies"] .en');
+    if (t) { const d = el('span', 'dot'); d.title = 'New · 新'; t.appendChild(d); }
+  }
+})();
+</script>
+
+</body>
+</html>

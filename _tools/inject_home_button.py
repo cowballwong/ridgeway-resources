@@ -72,12 +72,14 @@ def find_pages() -> list[tuple[Path, str]]:
     away = ROOT / "away-day-2026" / "index.html"
     if away.exists():
         pages.append((away, "../"))
-    sermons_dir = ROOT / "sermons"
-    if sermons_dir.exists():
-        for slug_dir in sorted(sermons_dir.iterdir()):
-            html = slug_dir / "index.html"
-            if html.exists():
-                pages.append((html, "../../"))
+    # Every HTML page one level inside sermons/ and studies/ (index.html plus
+    # sibling editions such as sermons/<slug>/krio.html).
+    for section in ("sermons", "studies"):
+        section_dir = ROOT / section
+        if section_dir.exists():
+            for slug_dir in sorted(p for p in section_dir.iterdir() if p.is_dir()):
+                for html in sorted(slug_dir.glob("*.html")):
+                    pages.append((html, "../../"))
     return pages
 
 
